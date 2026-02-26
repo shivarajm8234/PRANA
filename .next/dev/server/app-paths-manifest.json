@@ -1,7 +1,0 @@
-{
-  "/admin/page": "app/admin/page.js",
-  "/ambulance/page": "app/ambulance/page.js",
-  "/api/hospitals/match/route": "app/api/hospitals/match/route.js",
-  "/api/incidents/route": "app/api/incidents/route.js",
-  "/hospital/page": "app/hospital/page.js"
-}
