@@ -1,0 +1,567 @@
+[00:00:00.424] Server  LOG     ✓ Ready in 260ms
+[00:00:07.014] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:00:07.014] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/ambulance","route":"/ambulance"}
+[00:00:07.014] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ambulance color: rgb(120, 120, 120) color: inherit {"dp":"/ambulance","o":"http://localhost:3000/ambulance","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1772119848303} /_vercel/insights/view
+[00:00:08.847] Browser ERROR   [v0] Watch error: {}
+[00:00:13.837] Browser ERROR   [v0] Watch error: {}
+[00:00:18.909] Browser ERROR   [v0] Watch error: {}
+[00:00:23.899] Browser ERROR   [v0] Watch error: {}
+[00:00:29.429] Browser ERROR   [v0] Watch error: {}
+[00:00:34.861] Browser ERROR   [v0] Watch error: {}
+[00:00:39.755] Browser ERROR   [v0] Watch error: {}
+[00:00:44.763] Browser ERROR   [v0] Watch error: {}
+[00:00:49.797] Browser ERROR   [v0] Watch error: {}
+[00:00:54.762] Browser ERROR   [v0] Watch error: {}
+[00:00:59.875] Browser ERROR   [v0] Watch error: {}
+[00:01:04.878] Browser ERROR   [v0] Watch error: {}
+[00:01:08.831] Browser ERROR   [v0] Watch error: {}
+[00:01:13.826] Browser ERROR   [v0] Watch error: {}
+[00:01:18.825] Browser ERROR   [v0] Watch error: {}
+[00:01:23.968] Browser ERROR   [v0] Watch error: {}
+[00:01:28.999] Browser ERROR   [v0] Watch error: {}
+[00:01:34.246] Browser ERROR   [v0] Watch error: {}
+[00:01:39.358] Browser ERROR   [v0] Watch error: {}
+[00:01:44.376] Browser ERROR   [v0] Watch error: {}
+[00:01:49.817] Browser ERROR   [v0] Watch error: {}
+[00:01:54.814] Browser ERROR   [v0] Watch error: {}
+[00:01:57.138] Server  LOG     ✓ Compiled in 107ms
+[00:01:59.817] Browser ERROR   [v0] Watch error: {}
+[00:02:04.825] Browser ERROR   [v0] Watch error: {}
+[00:02:08.886] Browser ERROR   [v0] Watch error: {}
+[00:02:13.902] Browser ERROR   [v0] Watch error: {}
+[00:02:18.903] Browser ERROR   [v0] Watch error: {}
+[00:02:23.929] Browser ERROR   [v0] Watch error: {}
+[00:02:28.905] Browser ERROR   [v0] Watch error: {}
+[00:02:34.217] Browser ERROR   [v0] Watch error: {}
+[00:02:39.192] Browser ERROR   [v0] Watch error: {}
+[00:02:44.221] Browser ERROR   [v0] Watch error: {}
+[00:02:49.747] Browser ERROR   [v0] Watch error: {}
+[00:02:54.741] Browser ERROR   [v0] Watch error: {}
+[00:02:59.814] Browser ERROR   [v0] Watch error: {}
+[00:03:04.969] Browser ERROR   [v0] Watch error: {}
+[00:03:08.957] Browser ERROR   [v0] Watch error: {}
+[00:03:13.979] Browser ERROR   [v0] Watch error: {}
+[00:03:18.985] Browser ERROR   [v0] Watch error: {}
+[00:03:23.985] Browser ERROR   [v0] Watch error: {}
+[00:03:29.085] Browser ERROR   [v0] Watch error: {}
+[00:03:34.072] Browser ERROR   [v0] Watch error: {}
+[00:03:37.393] Server  LOG     ✓ Compiled in 67ms
+[00:03:39.136] Browser ERROR   [v0] Watch error: {}
+[00:03:43.488] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:03:43.488] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/ambulance","route":"/ambulance"}
+[00:03:43.488] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ambulance color: rgb(120, 120, 120) color: inherit {"dp":"/ambulance","o":"http://localhost:3000/ambulance","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1772120064778} /_vercel/insights/view
+[00:03:54.442] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:03:59.121] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:03:59.827] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:04:04.121] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:04:04.807] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:04:09.365] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:04:09.844] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:04:14.365] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:04:14.884] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:04:17.521] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:04:17.521] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/ambulance","route":"/ambulance"}
+[00:04:17.521] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ambulance color: rgb(120, 120, 120) color: inherit {"dp":"/ambulance","o":"http://localhost:3000/ambulance","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1772120098673} /_vercel/insights/view
+[00:04:19.222] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:04:24.108] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:04:24.391] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:04:29.371] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:04:29.371] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:04:34.419] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:04:34.419] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:04:39.435] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:04:39.435] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:04:44.439] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:04:44.439] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:04:49.485] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:04:49.485] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:04:54.456] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:04:54.456] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:04:59.455] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:04:59.455] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:05:04.465] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:05:04.465] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:05:09.515] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:05:09.515] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:05:14.591] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:05:14.591] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:05:19.631] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:05:19.631] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:05:19.631] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:05:24.519] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:05:24.636] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:05:29.520] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:05:29.638] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:05:34.522] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:05:34.746] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:05:39.522] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:05:39.747] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:05:44.557] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:05:44.892] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:05:49.556] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:05:50.513] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:05:54.557] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:05:55.734] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:05:59.560] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:06:00.754] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:06:04.561] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:06:05.756] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:06:09.598] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:06:10.742] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:06:14.598] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:06:15.774] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:06:19.660] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:06:20.932] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:06:20.932] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:06:24.660] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:06:25.950] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:06:29.698] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:06:30.916] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:06:34.703] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:06:36.187] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:06:39.726] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:06:41.199] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:06:44.730] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:06:46.192] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:06:49.762] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:06:51.198] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:06:54.757] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:06:56.466] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:06:59.803] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:07:01.480] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:07:04.800] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:07:06.794] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:07:09.819] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:07:12.055] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:07:14.836] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:07:17.065] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:07:19.854] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:07:20.969] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:07:24.856] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:07:26.172] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:07:29.861] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:07:31.190] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:07:34.860] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:07:36.198] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:07:39.919] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:07:41.230] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:07:44.920] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:07:46.296] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:07:49.959] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:07:51.225] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:07:54.959] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:07:56.281] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:08:00.029] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:08:01.536] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:08:05.034] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:08:06.522] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:08:10.061] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:08:11.556] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:08:15.079] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:08:16.539] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:08:20.078] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:08:21.043] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:08:25.107] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:08:26.102] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:08:30.115] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:08:31.153] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:08:35.110] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:08:36.144] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:08:40.158] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:08:41.294] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:08:45.250] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:08:46.300] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:08:50.248] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:08:51.650] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:08:55.248] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:08:56.709] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:09:00.294] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:09:01.893] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:09:05.294] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:09:07.433] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:09:10.331] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:09:12.435] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:09:15.347] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:09:17.446] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:09:20.408] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:09:21.043] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:09:25.408] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:09:26.100] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:09:30.459] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:09:31.072] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:09:35.454] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:09:36.518] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:09:40.487] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:09:41.524] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:09:45.488] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:09:46.571] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:09:50.604] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:09:51.625] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:09:55.603] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:09:56.569] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:10:00.637] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:10:01.579] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:10:05.657] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:10:06.585] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:10:10.662] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:10:11.597] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:10:15.663] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:10:16.595] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:10:20.697] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:10:21.062] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:10:25.702] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:10:26.609] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:10:30.752] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:10:31.870] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:10:35.754] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:10:36.872] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:10:40.758] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:10:41.890] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:10:45.758] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:10:46.889] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:10:50.789] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:10:51.872] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:10:55.797] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:10:56.905] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:11:00.803] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:11:01.904] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:11:05.803] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:11:06.899] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:11:10.835] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:11:11.902] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:11:15.835] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:11:16.925] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:11:20.868] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:11:21.174] Server  LOG     ✓ Compiled in 345ms
+[00:11:21.178] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:11:25.872] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:11:26.117] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:11:30.875] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:11:31.158] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:11:35.875] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:11:36.296] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:11:40.895] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:11:41.251] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:11:45.895] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:11:46.221] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:11:50.909] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:11:51.318] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:11:55.914] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:11:56.373] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:12:00.913] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:12:01.502] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:12:05.916] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:12:07.064] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:12:10.917] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:12:12.330] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:12:15.919] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:12:17.420] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:12:20.930] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:12:21.846] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:12:25.932] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:12:26.852] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:12:30.935] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:12:31.854] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:12:35.935] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:12:37.385] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:12:40.993] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:12:42.390] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:12:45.994] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:12:47.614] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:12:51.043] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:12:52.620] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:12:56.062] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:12:58.218] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:13:01.065] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:13:03.183] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:13:06.065] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:13:08.686] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:13:11.111] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:13:13.717] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:13:16.111] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:13:18.702] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:13:21.131] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:13:21.894] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:13:26.133] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:13:27.180] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:13:31.155] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:13:32.764] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:13:36.155] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:13:37.811] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:13:41.222] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:13:42.837] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:13:46.233] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:13:47.848] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:13:51.278] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:13:52.579] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:13:52.579] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/ambulance","route":"/ambulance"}
+[00:13:52.579] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ambulance color: rgb(120, 120, 120) color: inherit {"dp":"/ambulance","o":"http://localhost:3000/ambulance","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1772120673859} /_vercel/insights/view
+[00:13:54.309] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:13:58.980] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:13:59.322] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:14:03.980] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:14:04.293] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:14:08.981] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:14:09.301] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:14:14.026] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:14:14.315] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:14:19.026] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:14:19.324] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:14:24.036] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:14:24.324] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:14:29.036] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:14:29.677] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:14:34.053] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:14:34.907] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:14:39.053] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:14:39.945] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:14:44.112] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:14:44.952] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:14:49.112] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:14:49.924] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:14:54.155] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:14:55.292] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:14:55.292] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:14:59.160] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:15:00.392] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:15:04.163] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:15:04.987] Server  LOG     ✓ Compiled in 141ms
+[00:15:05.410] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:15:09.163] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:15:10.402] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:15:14.211] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:15:15.699] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:15:19.246] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:15:20.684] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:15:24.252] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:15:25.704] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:15:29.252] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:15:30.705] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:15:34.283] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:15:35.813] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:15:39.285] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:15:40.883] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:15:44.390] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:15:46.137] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:15:49.392] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:15:51.153] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:15:54.407] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:15:55.313] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:15:59.407] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:16:00.520] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:16:04.424] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:16:05.517] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:16:09.488] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:16:10.803] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:16:14.492] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:16:15.475] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:16:15.475] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/ambulance","route":"/ambulance"}
+[00:16:15.475] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/ambulance color: rgb(120, 120, 120) color: inherit {"dp":"/ambulance","o":"http://localhost:3000/ambulance","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1772120816751} /_vercel/insights/view
+[00:16:17.133] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:16:21.899] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:16:22.170] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:16:26.938] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:16:27.171] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:16:31.949] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:16:32.143] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:16:36.989] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:16:37.127] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:16:41.990] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:16:42.239] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:16:47.053] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:16:47.360] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:16:52.053] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:16:52.686] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:16:57.064] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:16:57.812] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:17:02.064] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:17:03.131] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:17:07.073] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:17:08.147] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:17:12.073] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:17:13.165] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:17:17.121] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:17:18.222] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:17:18.222] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:17:22.124] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:17:23.303] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:17:27.154] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:17:28.644] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:17:32.210] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:17:33.440] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:17:37.216] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:17:38.867] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:17:42.216] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:17:43.781] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:17:47.223] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:17:48.800] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:17:52.227] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:17:53.817] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:17:57.233] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:17:58.837] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:18:02.272] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:18:03.852] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:18:07.304] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:18:08.871] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:18:12.278] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:18:14.030] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:18:17.328] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:18:18.349] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:18:22.330] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:18:23.310] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:18:27.331] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:18:28.942] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:18:32.334] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:18:33.960] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:18:37.335] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:18:38.976] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:18:42.342] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:18:43.952] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:18:47.343] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:18:49.011] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:18:52.343] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:18:54.033] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:18:57.349] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:18:59.047] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:19:02.349] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:19:04.064] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:19:07.353] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:19:09.289] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:19:12.358] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:19:14.305] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:19:17.360] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:19:18.965] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:19:22.361] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:19:24.033] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:19:27.363] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:19:29.051] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:19:32.363] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:19:34.069] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:19:37.367] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:19:39.001] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:19:42.368] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:19:44.106] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:19:47.372] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:19:49.123] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:19:52.374] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:19:54.139] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:19:57.375] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:19:59.128] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:20:02.376] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:20:04.691] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:20:07.378] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:20:09.705] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:20:12.380] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:20:14.660] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:20:17.384] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:20:19.011] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:20:22.386] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:20:24.043] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:20:27.387] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:20:29.035] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:20:32.387] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:20:34.075] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:20:37.394] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:20:39.099] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:20:42.394] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:20:44.523] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:20:47.398] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:20:49.436] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:20:52.399] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:20:54.429] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:20:57.405] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:20:59.472] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:21:02.406] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:21:04.489] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:21:07.409] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:21:09.512] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:21:12.408] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:21:14.630] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:21:17.429] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:21:19.581] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:21:19.581] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:21:22.431] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:21:24.754] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:21:27.434] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:21:29.580] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:21:32.434] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:21:34.701] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:21:37.440] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:21:40.230] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:21:42.441] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:21:45.145] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:21:47.448] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:21:50.041] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:21:52.448] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:21:55.178] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:21:57.454] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:22:00.811] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:22:02.454] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:22:05.741] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:22:07.458] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:22:10.774] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:22:12.458] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:22:15.795] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:22:17.463] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:22:19.865] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:22:22.465] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:22:24.878] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:22:27.469] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:22:29.914] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:22:32.469] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:22:35.117] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:22:37.474] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:22:40.202] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:22:42.474] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:22:45.254] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:22:47.481] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:22:50.301] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:22:52.481] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:22:55.204] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:22:57.486] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:23:00.307] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:23:02.486] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:23:05.588] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:23:07.491] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:23:10.749] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:23:12.491] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:23:16.177] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:23:17.498] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:23:20.223] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:23:22.500] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:23:25.362] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:23:27.501] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:23:30.924] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:23:32.501] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:23:36.351] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:23:37.508] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:23:41.358] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:23:42.510] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:23:46.489] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:23:47.511] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:23:51.412] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:23:52.512] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:23:56.423] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:23:57.516] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:24:01.452] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:24:02.516] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:24:06.474] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:24:07.522] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:24:11.475] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:24:12.523] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:24:16.494] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:24:17.526] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:24:20.556] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:24:22.527] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:24:25.606] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:24:27.528] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:24:30.613] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:24:32.529] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:24:35.645] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:24:37.536] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:24:40.718] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:24:42.537] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:24:45.779] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:24:47.543] Browser WARN    [v0] Watch error: Position acquisition timed out
+[00:24:51.000] Browser WARN    [v0] Watch error: Unknown error acquiring position
+[00:24:52.543] Browser WARN    [v0] Watch error: Position acquisition timed out

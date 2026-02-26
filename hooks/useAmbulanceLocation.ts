@@ -17,6 +17,12 @@ export function useAmbulanceLocation() {
 
     setIsTracking(true);
 
+    const geoOptions = {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 5000,
+    };
+
     // Get initial location
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -27,14 +33,15 @@ export function useAmbulanceLocation() {
         setError(null);
       },
       (err) => {
-        console.error('[v0] Geolocation error:', err);
+        console.warn('[v0] Geolocation error:', err.message);
         setError(err.message);
-        // Use a default NYC location for testing
+        // Use a default Bengaluru location for testing if live tracking fails
         setLocation({
-          latitude: 40.7489,
-          longitude: -73.968,
+          latitude: 12.9716,
+          longitude: 77.5946,
         });
-      }
+      },
+      geoOptions
     );
 
     // Watch for location changes
@@ -47,9 +54,15 @@ export function useAmbulanceLocation() {
         setError(null);
       },
       (err) => {
-        console.error('[v0] Watch error:', err);
+        console.warn('[v0] Watch error:', err.message);
         setError(err.message);
-      }
+        // Only set fallback if we don't already have a location
+        setLocation((prev) => prev || {
+          latitude: 12.9716,
+          longitude: 77.5946,
+        });
+      },
+      geoOptions
     );
   };
 
