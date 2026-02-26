@@ -69,9 +69,15 @@ export default function HospitalPage() {
           <div className="bg-[#0f8b8d] text-white p-2 text-xl font-bold flex items-center justify-center rounded-full shadow-[0_0_15px_rgba(15,139,141,0.5)]">
              <AlertTriangle size={20} />
           </div>
-          <span className="text-lg font-bold tracking-widest text-[#d8deeb] uppercase ml-1">
-             St. Mary's Hospital
-          </span>
+          <select 
+              value={currentHospital.id}
+              onChange={(e) => setCurrentHospital(hospitalsMap.get(e.target.value) || mockHospitals[0])}
+              className="bg-transparent text-lg font-bold tracking-widest text-[#d8deeb] uppercase ml-1 border-none outline-none cursor-pointer hover:text-white transition-colors"
+          >
+             {mockHospitals.map(h => (
+                <option key={h.id} value={h.id} className="bg-[#212838] text-sm">{h.name}</option>
+             ))}
+          </select>
         </div>
 
         <div className="flex-1 flex justify-center items-center gap-12 font-bold tracking-wider text-sm opacity-90 hidden lg:flex">
@@ -229,27 +235,29 @@ export default function HospitalPage() {
                 <h3 className="font-bold text-lg tracking-wider text-white">Resource & Capacity Monitor</h3>
                 
                 <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-xs font-bold tracking-wider">
-                   <div className="space-y-1">
-                      <div className="opacity-70 uppercase">Emergency Beds:</div>
-                      <div className="text-lg font-mono tracking-widest text-[#d8deeb]">12 / 20</div>
-                      <div className="text-[#eab308] uppercase text-[10px]">ETA (YELLOW)</div>
-                   </div>
-                   
-                   <div className="space-y-1 relative">
-                      <div className="opacity-70 uppercase flex justify-between items-center pr-2">
-                         ICU Availability:
-                         <span className="bg-[#e84142] text-white px-2 rounded font-bold shadow-md shadow-red-900/50 drop-shadow">RED</span>
-                      </div>
-                      <div className="text-lg font-mono tracking-widest text-[#d8deeb]">3 / 8</div>
-                   </div>
-                   
-                   <div className="space-y-1 col-span-2 pt-2 border-t border-gray-700/50 mt-2">
-                      <div className="opacity-70 uppercase">ON-DUTY DOCTORS:</div>
-                      <div className="text-sm tracking-wide text-[#d8deeb] font-normal leading-relaxed">
-                          Trauma 5, Cardiac 3, Pediatric 4, <br/>
-                          Neuro 4, General 8
-                      </div>
-                   </div>
+                    <div className="space-y-1">
+                       <div className="opacity-70 uppercase">Emergency Beds:</div>
+                       <div className="text-lg font-mono tracking-widest text-[#d8deeb]">{currentHospital.capacity.generalBeds - 8 > 0 ? currentHospital.capacity.generalBeds - 8 : 2} / {currentHospital.capacity.generalBeds}</div>
+                       <div className="text-[#eab308] uppercase text-[10px]">ETA (YELLOW)</div>
+                    </div>
+                    
+                    <div className="space-y-1 relative">
+                       <div className="opacity-70 uppercase flex justify-between items-center pr-2">
+                          ICU Availability:
+                          <span className={`text-white px-2 rounded font-bold shadow-md drop-shadow ${currentHospital.capacity.icuBeds < 5 ? 'bg-[#e84142] shadow-red-900/50' : 'bg-[#eab308] shadow-amber-900/50'}`}>
+                             {currentHospital.capacity.icuBeds < 5 ? 'RED' : 'YELLOW'}
+                          </span>
+                       </div>
+                       <div className="text-lg font-mono tracking-widest text-[#d8deeb]">{currentHospital.capacity.icuBeds < 5 ? '1' : '3'} / {currentHospital.capacity.icuBeds}</div>
+                    </div>
+                    
+                    <div className="space-y-1 col-span-2 pt-2 border-t border-gray-700/50 mt-2">
+                       <div className="opacity-70 uppercase">ON-DUTY DOCTORS:</div>
+                       <div className="text-sm tracking-wide text-[#d8deeb] font-mono leading-relaxed">
+                           Available Specialists: {currentHospital.capacity.doctors} <br/>
+                           <span className="text-[10px] text-gray-400 font-sans tracking-widest">Capabilities: {currentHospital.capabilities.join(', ').toUpperCase()}</span>
+                       </div>
+                    </div>
                    
                    <div className="space-y-1 col-span-2 flex items-center gap-4 border-t border-gray-700/50 pt-4 mt-2">
                       <div className="uppercase">BLOOD BANK:</div>

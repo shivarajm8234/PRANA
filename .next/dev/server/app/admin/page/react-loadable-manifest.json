@@ -1,0 +1,11 @@
+{
+  "[project]/components/admin/AmbulanceTracker.tsx [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/components/admin/AmbulanceTracker.tsx [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/node_modules_leaflet_dist_leaflet-src_8608e1e4.js",
+      "static/chunks/components_admin_AmbulanceTracker_tsx_5c4e2c03._.js",
+      "static/chunks/node_modules_leaflet_dist_leaflet_ef5f0413.css",
+      "static/chunks/components_admin_AmbulanceTracker_tsx_de3be5d0._.js"
+    ]
+  }
+}
