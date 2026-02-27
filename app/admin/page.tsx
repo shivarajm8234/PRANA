@@ -19,6 +19,14 @@ export default function AdminPage() {
   const [selectedHospital, setSelectedHospital] = useState<Hospital | null>(null);
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
   const [selectedAmbulanceForTraffic, setSelectedAmbulanceForTraffic] = useState<Ambulance | null>(null);
+  const [hospitalSearchTerm, setHospitalSearchTerm] = useState('');
+  const [trafficSignalOverrides, setTrafficSignalOverrides] = useState<Record<string, 'red'|'yellow'|'green'|'auto'>>({});
+  
+  const getMockAddress = (lat: number, lng: number) => {
+      const idx = Math.abs(Math.floor(lat * 100000) + Math.floor(lng * 100000));
+      const streets = ["HSR Layout Sec 2", "Koramangala 4th Block", "Indiranagar 100ft Rd", "MG Road Junction", "Whitefield Main Rd", "Outer Ring Road", "Bannerghatta Rd", "Residency Rd", "Jayanagar 4th T Block", "Electronic City Phase 1"];
+      return streets[idx % streets.length] + ", Bangalore Urban";
+  };
   
   // Local state for CRUD operations on drivers/hospitals
   const [localUsers, setLocalUsers] = useState<Ambulance[]>(mockAmbulances);
@@ -62,6 +70,14 @@ export default function AdminPage() {
              message: `HOSPITAL BED ALLOCATED AT ${hosp?.name?.toUpperCase() || 'ST. MARY\'S'} [${inc.severity.toUpperCase()}]`, 
              time: inc.allocatedAt || inc.createdAt + 1000, 
              isAction: true 
+          });
+      }
+      if (inc.status === 'completed' && inc.completedAt) {
+          activityLogs.push({
+             id: `${inc.id}-arrived`,
+             message: `AMBULANCE ${inc.ambulanceId || 'A72B'} ARRIVED AT HOSPITAL. PATIENT HANDOVER COMPLETE.`,
+             time: inc.completedAt,
+             isAction: true
           });
       }
   });
@@ -295,8 +311,17 @@ export default function AdminPage() {
                                  <p className="text-[10px] text-gray-500 font-mono mt-1 font-bold">{mockHospitals.length} REGISTERED FACILITIES</p>
                              </div>
                          </div>
+                         <div className="p-3 border-b border-[#30394f] bg-[#1a202d] shrink-0">
+                             <input 
+                                 type="text" 
+                                 placeholder="Search hospitals..." 
+                                 value={hospitalSearchTerm}
+                                 onChange={(e) => setHospitalSearchTerm(e.target.value)}
+                                 className="w-full bg-[#1b2230] text-sm text-white border border-[#30394f] rounded-lg px-4 py-2 focus:outline-none focus:border-[#3b82f6] transition-colors"
+                             />
+                         </div>
                          <div className="flex-1 overflow-y-auto p-3 space-y-3" style={{ scrollbarWidth: 'none' }}>
-                             {mockHospitals.map(hospital => (
+                             {mockHospitals.filter(h => h.name.toLowerCase().includes(hospitalSearchTerm.toLowerCase())).map(hospital => (
                                  <div 
                                      key={hospital.id} 
                                      onClick={() => setSelectedHospital(hospital)}
@@ -340,6 +365,7 @@ export default function AdminPage() {
                                                     }`}>
                                                         {selectedHospital.affordability} CLASS
                                                     </span>
+                                                    <span className="bg-[#1b2230] px-3 py-1 rounded border border-[#eab308]/50 text-[#eab308]">PASSCODE: {selectedHospital.accessCode || 'NONE'}</span>
                                                 </div>
                                             </div>
                                             <div className="bg-[#1b2230] p-3 rounded-lg border border-[#30394f] flex flex-col items-end">
@@ -452,36 +478,46 @@ export default function AdminPage() {
 
               {activeTab === 'traffic' && (
                  <div className="flex-1 flex gap-6 h-full min-h-0 overflow-hidden">
-                     {/* Left Sidebar: Ambulance List for routing */}
+                     {/* Left Sidebar: Traffic Signal Directory */}
                      <div className="w-1/3 min-w-[320px] bg-[#212738] border border-[#343d54] rounded-lg shadow-lg flex flex-col overflow-hidden shrink-0">
                          <div className="p-5 border-b border-[#30394f] bg-[#1a202d] shrink-0 flex items-center gap-3">
                              <Activity className="text-[#22c55e]" size={24} />
                              <div>
-                                 <h3 className="font-bold tracking-widest uppercase text-white text-sm">Traffic Preemption</h3>
-                                 <p className="text-[10px] text-gray-500 font-mono mt-1 font-bold">SELECT AMBULANCE TO TRACK</p>
+                                 <h3 className="font-bold tracking-widest uppercase text-white text-sm">Traffic Control</h3>
+                                 <p className="text-[10px] text-gray-500 font-mono mt-1 font-bold">SELECT INTERSECTION TO MONITOR</p>
                              </div>
                          </div>
                          <div className="flex-1 overflow-y-auto p-3 space-y-3" style={{ scrollbarWidth: 'none' }}>
-                             {mockAmbulances.map(amb => {
-                                 const isBusy = amb.status === 'enroute' || amb.status === 'transporting';
+                             {mockTrafficSignals.map(signal => {
+                                 // Mock determining busy status randomly
+                                 const isCongested = Math.random() > 0.7;
+                                 const state = trafficSignalOverrides[signal.id] || 'auto';
+                                 
                                  return (
                                      <div 
-                                         key={amb.id} 
-                                         onClick={() => setSelectedAmbulanceForTraffic(amb)}
+                                         key={signal.id} 
+                                         onClick={() => setSelectedAmbulanceForTraffic(signal as any)} // Overloading this state for purely mock toggle 
                                          className={`p-4 rounded-lg cursor-pointer border transition-all ${
-                                             selectedAmbulanceForTraffic?.id === amb.id 
-                                                 ? 'bg-[#22c55e]/10 border-[#22c55e] shadow-[0_0_15px_rgba(34,197,94,0.15)] scale-[1.02]' 
+                                             (selectedAmbulanceForTraffic as any)?.id === signal.id 
+                                                 ? 'bg-[#3b82f6]/10 border-[#3b82f6] shadow-[0_0_15px_rgba(59,130,246,0.15)] scale-[1.02]' 
                                                  : 'bg-[#1b2230] border-[#30394f] hover:border-[#4b5563] hover:bg-[#1f2937]'
                                          }`}
                                      >
-                                         <div className="flex items-center gap-3">
-                                             <Truck className={selectedAmbulanceForTraffic?.id === amb.id ? 'text-[#22c55e]' : 'text-gray-400'} size={18} />
-                                             <h4 className={`font-bold tracking-wide ${selectedAmbulanceForTraffic?.id === amb.id ? 'text-[#22c55e]' : 'text-white'}`}>
-                                                {amb.id.toUpperCase()} - {amb.name}
-                                             </h4>
+                                         <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-3">
+                                                <div className={`w-3 h-3 rounded-full shadow-inner border border-black/40 ${isCongested ? 'bg-[#ef4444] shadow-[0_0_8px_#ef4444]' : 'bg-[#22c55e] shadow-[0_0_8px_#22c55e]'}`}></div>
+                                                <h4 className={`font-bold tracking-wide ${((selectedAmbulanceForTraffic as any)?.id === signal.id) ? 'text-[#3b82f6]' : 'text-white'}`}>
+                                                   {signal.id.toUpperCase()} - {signal.name || "Intersection"}
+                                                </h4>
+                                            </div>
+                                         </div>
+                                         <div className="text-xs text-gray-400 font-mono mt-1.5 mb-2 whitespace-nowrap overflow-hidden text-ellipsis opacity-80">
+                                            <MapPin size={10} className="inline mr-1" />
+                                            {getMockAddress(signal.location.latitude, signal.location.longitude)}
                                          </div>
                                          <div className="flex gap-4 mt-3 text-[10px] font-bold tracking-wider font-mono uppercase">
-                                             <div className="text-gray-400"><span className="text-gray-500">STATUS:</span> <span className={`${isBusy ? 'text-[#eab308]' : 'text-[#22c55e]'}`}>{amb.status}</span></div>
+                                             <div className="text-gray-400"><span className="text-gray-500">STATE:</span> <span className={state === 'auto' ? 'text-gray-300' : state === 'red' ? 'text-red-500' : state === 'yellow' ? 'text-yellow-500' : 'text-green-500'}>{state}</span></div>
+                                             <div className="text-gray-400"><span className="text-gray-500">DENSITY:</span> <span className={isCongested ? 'text-[#ef4444]' : 'text-[#22c55e]'}>{isCongested ? 'HIGH' : 'NORMAL'}</span></div>
                                          </div>
                                      </div>
                                  )
@@ -489,115 +525,129 @@ export default function AdminPage() {
                          </div>
                      </div>
 
-                     {/* Right Panel: Active Traffic Route */}
+                     {/* Right Panel: Signal details */}
                      <div className="flex-1 bg-[#212738] border border-[#343d54] rounded-lg shadow-lg flex flex-col overflow-auto relative">
                          {selectedAmbulanceForTraffic ? (
                              <div className="p-8 pb-12 animate-in fade-in duration-300">
                                  {/* Header */}
                                  <div className="flex items-start gap-6 border-b border-[#30394f] pb-8 mb-8">
-                                     <div className="w-20 h-20 bg-gradient-to-br from-[#166534] to-[#22c55e] border-2 border-[#4ade80] shadow-[0_0_20px_rgba(34,197,94,0.3)] rounded-2xl flex items-center justify-center text-white shrink-0">
-                                         <Truck size={36} />
+                                     <div className="w-20 h-20 bg-gradient-to-br from-[#1e3a8a] to-[#3b82f6] border-2 border-[#60a5fa] shadow-[0_0_20px_rgba(59,130,246,0.3)] rounded-xl flex flex-col items-center justify-center gap-1 shrink-0 p-2">
+                                         <div className={`w-3.5 h-3.5 rounded-full ${trafficSignalOverrides[(selectedAmbulanceForTraffic as any).id] === 'red' ? 'bg-[#ef4444] shadow-[0_0_10px_#ef4444]' : 'bg-red-900/40'} shadow-inner border border-black/30`}></div>
+                                         <div className={`w-3.5 h-3.5 rounded-full ${trafficSignalOverrides[(selectedAmbulanceForTraffic as any).id] === 'yellow' ? 'bg-[#eab308] shadow-[0_0_10px_#eab308]' : 'bg-yellow-900/40'} shadow-inner border border-black/30`}></div>
+                                         <div className={`w-3.5 h-3.5 rounded-full ${(!trafficSignalOverrides[(selectedAmbulanceForTraffic as any).id] || trafficSignalOverrides[(selectedAmbulanceForTraffic as any).id] === 'green') ? 'bg-[#22c55e] shadow-[0_0_10px_#22c55e]' : 'bg-green-900/40'} shadow-inner border border-black/30`}></div>
                                      </div>
                                      <div className="flex-1">
                                          <div className="flex justify-between items-start">
                                             <div>
-                                                <h2 className="text-3xl font-bold text-white tracking-wider mb-2">Ambulance {selectedAmbulanceForTraffic.id.toUpperCase()}</h2>
+                                                <h2 className="text-3xl font-bold text-white tracking-wider mb-2">{((selectedAmbulanceForTraffic as any).name) || "City Intersection"}</h2>
+                                                <div className="text-sm text-gray-400 font-mono mb-3 uppercase tracking-wider">
+                                                    <MapPin size={14} className="inline mr-1" />
+                                                    {getMockAddress((selectedAmbulanceForTraffic as any).location.latitude, (selectedAmbulanceForTraffic as any).location.longitude)}
+                                                </div>
                                                 <div className="flex gap-4 text-xs font-bold tracking-widest uppercase font-mono mt-2">
-                                                    <span className="bg-[#242b3d] px-3 py-1 rounded border border-[#3b4761] text-gray-300">VEHICLE ID: {selectedAmbulanceForTraffic.id}</span>
-                                                    <span className={`px-3 py-1 rounded border shadow-sm bg-[#22c55e]/10 border-[#22c55e]/30 text-[#22c55e]`}>
-                                                        ACTIVE ROUTING
+                                                    <span className="bg-[#242b3d] px-3 py-1 rounded border border-[#3b4761] text-gray-300">ATS NODE: {(selectedAmbulanceForTraffic as any).id}</span>
+                                                    <span className={`px-3 py-1 rounded border shadow-sm ${
+                                                        trafficSignalOverrides[(selectedAmbulanceForTraffic as any).id]
+                                                            ? 'bg-red-500/10 border-red-500/30 text-red-500'
+                                                            : 'bg-[#3b82f6]/10 border-[#3b82f6]/30 text-[#3b82f6]'
+                                                    }`}>
+                                                        {trafficSignalOverrides[(selectedAmbulanceForTraffic as any).id] ? 'MANUAL OVERRIDE ACTIVE' : 'CONNECTED TO GRID'}
                                                     </span>
                                                 </div>
                                             </div>
                                             <div className="bg-[#1b2230] p-3 rounded-lg border border-[#30394f] flex flex-col items-end">
-                                               <span className="text-[10px] text-gray-500 font-bold tracking-widest uppercase mb-1">ATS OVERRIDE</span>
-                                               <span className="text-[#22c55e] border border-[#22c55e]/30 bg-[#22c55e]/10 px-2 py-1 rounded text-xs font-bold tracking-wider flex items-center gap-2">
-                                                   <span className="w-1.5 h-1.5 bg-[#22c55e] rounded-full animate-pulse"></span> PREEMPTING SIGNALS
+                                               <span className="text-[10px] text-gray-500 font-bold tracking-widest uppercase mb-1">AI OVERRIDE STATUS</span>
+                                               <span className="text-gray-400 border border-[#343d54] bg-[#242b3d] px-2 py-1 rounded text-xs font-bold tracking-wider flex items-center gap-2">
+                                                   STANDBY / AUTO
                                                </span>
                                             </div>
                                          </div>
                                      </div>
                                  </div>
 
-                                 {/* Traffic Route Timeline */}
-                                 <h3 className="text-sm font-bold tracking-widest text-[#22c55e] uppercase mb-6 flex items-center gap-2">
-                                     <Activity size={16} /> Signal Intersections En Route
+                                 {/* Parameters Matrix */}
+                                 <h3 className="text-sm font-bold tracking-widest text-[#3b82f6] uppercase mb-6 flex items-center gap-2">
+                                     <Activity size={16} /> Live Intersection Telemetry
                                  </h3>
-                                 <div className="space-y-4">
-                                     {/* Compute unique deterministic signals for this specific ambulance */}
-                                     {(() => {
-                                         const hash = Array.from(selectedAmbulanceForTraffic.id).reduce((acc, char) => acc + char.charCodeAt(0) * 31, 0);
-                                         const startIdx = hash % Math.max(1, mockTrafficSignals.length - 10);
-                                         return mockTrafficSignals.slice(startIdx, startIdx + 5);
-                                     })().map((signal, idx) => {
-                                         const isPassed = idx < 1;
-                                         const isCurrent = idx === 1;
-                                         const isUpcoming = idx > 1;
-                                         
-                                         return (
-                                             <div key={signal.id} className={`flex items-stretch gap-4 ${isPassed ? 'opacity-40' : ''}`}>
-                                                 {/* Timeline icon */}
-                                                 <div className="flex flex-col items-center">
-                                                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 z-10 ${
-                                                         isPassed ? 'bg-[#2a3044] border-[#3b4761] text-gray-500' :
-                                                         isCurrent ? 'bg-[#22c55e]/20 border-[#22c55e] shadow-[0_0_15px_#22c55e] text-[#22c55e] animate-pulse' :
-                                                         'bg-[#212738] border-[#3b4761] text-gray-400'
-                                                     }`}>
-                                                         {isPassed ? <CheckCircle2 size={16} /> : isCurrent ? <Truck size={16} /> : <AlertOctagon size={16} />}
-                                                     </div>
-                                                     {idx !== 4 && <div className={`w-0.5 flex-1 ${isPassed || isCurrent ? 'bg-[#22c55e]' : 'bg-[#3b4761]'}`}></div>}
-                                                 </div>
-                                                 
-                                                 {/* Signal Data Card */}
-                                                 <div className={`flex-1 p-4 rounded-xl border mb-6 ${
-                                                     isPassed ? 'bg-[#1b2230] border-[#30394f]' :
-                                                     isCurrent ? 'bg-[#22c55e]/5 border-[#22c55e] shadow-inner relative overflow-hidden' :
-                                                     'bg-[#212738] border-[#343d54]'
-                                                 }`}>
-                                                     <div className="flex justify-between items-start mb-2">
-                                                         <div>
-                                                             <h4 className="font-bold text-white tracking-widest uppercase">{signal.name || `Intersection ${signal.id}`}</h4>
-                                                             <div className="text-xs text-gray-400 font-mono mt-1 flex items-center gap-2">
-                                                                 <MapPin size={12}/> {signal.location.latitude.toFixed(4)}, {signal.location.longitude.toFixed(4)}
-                                                             </div>
-                                                         </div>
-                                                         
-                                                         {/* Custom Traffic Light UI */}
-                                                         <div className="flex items-center gap-1 bg-black/40 p-1.5 rounded-full border border-gray-700/50 shadow-inner">
-                                                             <div className={`w-3 h-3 rounded-full ${isUpcoming ? 'bg-red-500 shadow-[0_0_10px_#ef4444]' : 'bg-red-900/40'} border border-black/20 text-[6px] font-bold text-black flex items-center justify-center shadow-inner`}></div>
-                                                             <div className={`w-3 h-3 rounded-full bg-yellow-900/40 border border-black/20 text-[6px] font-bold text-black flex items-center justify-center shadow-inner`}></div>
-                                                             <div className={`w-3 h-3 rounded-full ${isCurrent || isPassed ? 'bg-green-500 shadow-[0_0_10px_#22c55e]' : 'bg-green-900/40'} border border-black/20 text-[6px] font-bold text-black flex items-center justify-center shadow-inner`}></div>
-                                                         </div>
-                                                     </div>
-                                                     
-                                                     <div className="bg-[#1b2230] p-3 rounded mt-3 border border-[#30394f] flex justify-between items-center text-xs font-mono font-bold tracking-wider">
-                                                         {isPassed ? (
-                                                             <span className="text-gray-500 uppercase">Passed {Math.floor(Math.random() * 5) + 1} mins ago</span>
-                                                         ) : isCurrent ? (
-                                                             <>
-                                                                 <span className="text-[#22c55e] uppercase">● GREEN WAVE OVERRIDE ACTIVE</span>
-                                                                 <span className="text-white">ETA: 0m</span>
-                                                             </>
-                                                         ) : (
-                                                             <>
-                                                                 <span className="text-[#eab308] uppercase animate-pulse flex items-center gap-1"><ArrowRightCircle size={12}/> TRIGGERING OVERRIDE...</span>
-                                                                 <span className="text-white">ETA: {idx * 2 - 1}m</span>
-                                                             </>
-                                                         )}
-                                                     </div>
-                                                 </div>
-                                             </div>
-                                         )
-                                     })}
+                                 <div className="grid grid-cols-2 gap-6">
+                                     <div className="bg-[#1b2230] border border-[#30394f] rounded-xl p-5 shadow-inner">
+                                         <h4 className="text-[10px] font-bold tracking-widest text-gray-400 uppercase border-b border-[#30394f] pb-2 mb-4">Current Cycle Times</h4>
+                                         <div className="space-y-4">
+                                            <div className="flex justify-between items-center text-sm font-mono tracking-wider">
+                                                <span className="text-gray-300 flex items-center gap-2"><div className="w-2.5 h-2.5 rounded bg-red-500"></div> N-S Red Phase</span>
+                                                <span className="text-white font-bold">45.0s</span>
+                                            </div>
+                                            <div className="flex justify-between items-center text-sm font-mono tracking-wider">
+                                                <span className="text-gray-300 flex items-center gap-2"><div className="w-2.5 h-2.5 rounded bg-[#22c55e]"></div> N-S Green Phase</span>
+                                                <span className="text-white font-bold">90.5s</span>
+                                            </div>
+                                            <div className="flex justify-between items-center text-sm font-mono tracking-wider pt-4 border-t border-[#30394f]">
+                                                <span className="text-gray-300 flex items-center gap-2"><div className="w-2.5 h-2.5 rounded bg-red-500"></div> E-W Red Phase</span>
+                                                <span className="text-white font-bold">95.0s</span>
+                                            </div>
+                                            <div className="flex justify-between items-center text-sm font-mono tracking-wider">
+                                                <span className="text-gray-300 flex items-center gap-2"><div className="w-2.5 h-2.5 rounded bg-[#22c55e]"></div> E-W Green Phase</span>
+                                                <span className="text-white font-bold">40.5s</span>
+                                            </div>
+                                         </div>
+                                     </div>
+
+                                     <div className="flex flex-col gap-6">
+                                        <div className="bg-[#1b2230] border border-[#30394f] rounded-xl p-5 shadow-inner flex-1 flex flex-col justify-center items-center">
+                                            <span className="text-[10px] text-gray-500 font-bold tracking-widest uppercase mb-1">THROUGHPUT RATE</span>
+                                            <div className="text-4xl font-bold font-mono text-white mb-1">1,402</div>
+                                            <span className="text-[#eab308] text-xs font-bold tracking-wider">VEHICLES / HOUR</span>
+                                        </div>
+                                        <div className="bg-[#1b2230] border border-[#30394f] rounded-xl p-5 shadow-inner flex-1 flex flex-col justify-center items-center">
+                                            <span className="text-[10px] text-gray-500 font-bold tracking-widest uppercase mb-1">CONGESTION LEVEL</span>
+                                            <div className="w-full bg-[#2a3044] rounded-full h-3 mt-3 mb-2">
+                                                <div className="bg-gradient-to-r from-[#22c55e] via-[#eab308] to-[#ef4444] h-3 rounded-full" style={{width: `${Math.floor(Math.random() * 60) + 20}%`}}></div>
+                                            </div>
+                                            <span className="text-gray-400 text-xs font-bold font-mono tracking-wider">MODERATE</span>
+                                        </div>
+                                     </div>
                                  </div>
+                                 
+                                 <div className="mt-8 pt-6 border-t border-[#30394f]">
+                                     <h4 className="text-[10px] font-bold tracking-widest text-gray-400 uppercase mb-4">Manual Signal Override Control</h4>
+                                     <div className="flex items-center gap-4">
+                                         <button 
+                                             onClick={() => setTrafficSignalOverrides(prev => ({...prev, [(selectedAmbulanceForTraffic as any).id]: 'red'}))}
+                                             className={`flex-1 py-3 rounded-lg text-xs font-bold tracking-wider uppercase transition-colors ${trafficSignalOverrides[(selectedAmbulanceForTraffic as any).id] === 'red' ? 'bg-[#ef4444] text-white shadow-[0_0_15px_#ef4444]' : 'bg-[#2a3044] text-gray-400 hover:bg-[#ef4444]/20 hover:text-[#ef4444]'}`}>
+                                             Force Red Phase
+                                         </button>
+                                         <button 
+                                             onClick={() => setTrafficSignalOverrides(prev => ({...prev, [(selectedAmbulanceForTraffic as any).id]: 'yellow'}))}
+                                             className={`flex-1 py-3 rounded-lg text-xs font-bold tracking-wider uppercase transition-colors ${trafficSignalOverrides[(selectedAmbulanceForTraffic as any).id] === 'yellow' ? 'bg-[#eab308] text-white shadow-[0_0_15px_#eab308]' : 'bg-[#2a3044] text-gray-400 hover:bg-[#eab308]/20 hover:text-[#eab308]'}`}>
+                                             Force Yellow Phase
+                                         </button>
+                                         <button 
+                                             onClick={() => setTrafficSignalOverrides(prev => ({...prev, [(selectedAmbulanceForTraffic as any).id]: 'green'}))}
+                                             className={`flex-1 py-3 rounded-lg text-xs font-bold tracking-wider uppercase transition-colors ${trafficSignalOverrides[(selectedAmbulanceForTraffic as any).id] === 'green' ? 'bg-[#22c55e] text-white shadow-[0_0_15px_#22c55e]' : 'bg-[#2a3044] text-gray-400 hover:bg-[#22c55e]/20 hover:text-[#22c55e]'}`}>
+                                             Force Green
+                                         </button>
+                                         <button 
+                                             onClick={() => {
+                                                 const newOverrides = {...trafficSignalOverrides};
+                                                 delete newOverrides[(selectedAmbulanceForTraffic as any).id];
+                                                 setTrafficSignalOverrides(newOverrides);
+                                             }}
+                                             className={`w-36 py-3 bg-[#1b2230] border border-[#3b82f6]/50 text-[#3b82f6] hover:bg-[#3b82f6]/10 rounded-lg text-xs font-bold tracking-wider uppercase transition-all ${!trafficSignalOverrides[(selectedAmbulanceForTraffic as any).id] ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                                             Reset (Auto)
+                                         </button>
+                                     </div>
+                                 </div>
+
                              </div>
                          ) : (
                              <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500 bg-[#1b2230]/50 backdrop-blur-[2px]">
-                                 <div className="w-24 h-24 mb-6 rounded-full bg-[#2a3044] flex items-center justify-center shadow-inner">
-                                    <Activity size={48} className="opacity-40" />
+                                 <div className="w-24 h-24 mb-6 rounded-full bg-[#2a3044] flex items-center justify-center shadow-inner pt-2 pb-1 flex-col gap-1">
+                                    <div className="w-4 h-4 rounded-full bg-[#343d54]"></div>
+                                    <div className="w-4 h-4 rounded-full bg-[#343d54]"></div>
+                                    <div className="w-4 h-4 rounded-full bg-[#343d54]"></div>
                                  </div>
-                                 <h2 className="text-xl font-bold tracking-widest uppercase text-white mb-2 pb-2 border-b border-[#30394f]">No Ambulance Selected</h2>
-                                 <p className="text-sm font-mono text-gray-400 max-w-xs text-center leading-relaxed">Select an ambulance from the left to track its real-time traffic signal preemption route across the city.</p>
+                                 <h2 className="text-xl font-bold tracking-widest uppercase text-white mb-2 pb-2 border-b border-[#30394f]">No Signal Selected</h2>
+                                 <p className="text-sm font-mono text-gray-400 max-w-xs text-center leading-relaxed">Select an active intersection from the grid layout to monitor realtime traffic flow and routing configurations.</p>
                              </div>
                          )}
                      </div>
@@ -614,7 +664,7 @@ export default function AdminPage() {
                              </div>
                              <div>
                                  <h2 className="text-2xl font-bold tracking-widest uppercase text-white drop-shadow-md">AI Optimization Engine</h2>
-                                 <p className="text-sm font-mono text-[#a78bfa] font-bold tracking-wider mt-1 opacity-90 text-shadow-sm">MODEL V4.2.0-PROD • PROCESSING LIVE</p>
+                                 <p className="text-sm font-mono text-[#a78bfa] font-bold tracking-wider mt-1 opacity-90 text-shadow-sm">MODEL V4.2.0-PROD • PROCESSING LIVE EMERGENCY DATA</p>
                              </div>
                          </div>
                          <div className="flex gap-4">
@@ -657,17 +707,20 @@ export default function AdminPage() {
                      <div className="flex gap-6 flex-1 min-h-[300px]">
                          {/* Trend Bar Chart */}
                          <div className="flex-1 bg-[#212738] border border-[#343d54] p-6 rounded-xl shadow-lg flex flex-col relative">
-                             <h4 className="text-sm font-bold tracking-widest text-white uppercase mb-6 flex items-center justify-between">
-                                Golden Hour Rescue Trend 
-                                <span className="bg-[#a78bfa]/20 text-[#a78bfa] text-[10px] px-2 py-1 rounded border border-[#a78bfa]/50">LAST 7 DAYS</span>
+                             <h4 className="text-sm font-bold tracking-widest text-[#a78bfa] uppercase mb-4 flex items-center justify-between border-b border-[#30394f] pb-3">
+                                Dynamic Neural Link Adjustments
+                                <span className="bg-[#a78bfa]/20 text-[#a78bfa] text-[10px] px-2 py-1 rounded border border-[#a78bfa]/50">LIVE SYSTEM</span>
                              </h4>
+                             <p className="text-gray-300 text-sm font-medium leading-relaxed mb-6 font-mono bg-black/30 p-4 rounded border border-[#30394f]">
+                                 The AI allocates hospitals by dynamically balancing internal parameters (e.g., ICU capacity, specialists) and real-time traffic nodes. The neural link continuously adjusts global routing priorities to combat urban fragmentation and reduce Golden Hour response loss.
+                             </p>
                              <div className="flex-1 flex items-end gap-3 justify-between mt-auto mx-4 pb-2">
                                  {[65, 59, 80, 81, 56, 95, 120].map((val, i) => (
                                      <div key={i} className="w-full flex flex-col items-center gap-2 group cursor-crosshair">
                                          <div className="h-48 w-full bg-[#1b2230] rounded-sm relative flex items-end overflow-hidden group-hover:bg-[#161c28]">
-                                             <div className="w-full bg-gradient-to-t from-[#6d28d9] to-[#8b5cf6] rounded-t-sm shadow-[0_0_10px_#8b5cf6]" style={{height: `${(val / 120) * 100}%`}}></div>
+                                             <div className="w-full bg-gradient-to-t from-[#6d28d9] to-[#8b5cf6] rounded-t-sm shadow-[0_0_10px_#8b5cf6] transition-all duration-500 ease-out" style={{height: `${(val / 120) * 100}%`}}></div>
                                          </div>
-                                         <span className="text-xs font-mono font-bold text-gray-500 uppercase">DAY {i+1}</span>
+                                         <span className="text-xs font-mono font-bold text-gray-500 uppercase group-hover:text-gray-300 transition-colors">DAY {i+1}</span>
                                      </div>
                                  ))}
                              </div>
@@ -675,27 +728,27 @@ export default function AdminPage() {
                          
                          {/* Resource Demand Heatmap (Mocked text representation) */}
                          <div className="w-[400px] bg-[#212738] border border-[#343d54] p-6 rounded-xl shadow-lg flex flex-col gap-6 shrink-0">
-                            <h4 className="text-sm font-bold tracking-widest text-white uppercase flex items-center justify-between">
-                                Predictive Heatmap <span className="text-[10px] font-mono text-[#eab308]">NEXT 2 HRS</span>
+                            <h4 className="text-sm font-bold tracking-widest text-white uppercase flex items-center justify-between border-b border-[#30394f] pb-3">
+                                Predictive Load Heatmap <span className="text-[10px] font-mono text-[#eab308] bg-[#eab308]/10 px-2 py-1 rounded border border-[#eab308]/30">NEXT 2 HRS</span>
                             </h4>
-                            <div className="flex flex-col gap-3 flex-1 justify-center">
-                                <div className="space-y-1">
-                                    <div className="flex justify-between text-[10px] font-bold tracking-widest font-mono text-gray-400 uppercase">
-                                        <span>Cardiac Arrest Incidence</span> <span className="text-[#e84142]">HIGH RISK SECTOR 4</span>
+                            <div className="flex flex-col gap-4 flex-1 justify-center">
+                                <div className="space-y-1 group">
+                                    <div className="flex justify-between text-[10px] font-bold tracking-widest font-mono text-gray-400 uppercase mb-2">
+                                        <span>Cardiac Arrest Incidence</span> <span className="text-[#e84142] group-hover:scale-110 transition-transform origin-right">HIGH RISK SECTOR 4</span>
                                     </div>
-                                    <div className="w-full bg-[#1b2230] h-2 rounded"><div className="bg-[#e84142] h-full rounded shadow-[0_0_10px_#e84142]" style={{width: '78%'}}></div></div>
+                                    <div className="w-full bg-[#1b2230] h-3 rounded-full overflow-hidden border border-black/50 shadow-inner"><div className="bg-[#e84142] h-full rounded-full shadow-[0_0_15px_#e84142] transition-all duration-1000" style={{width: '88%'}}></div></div>
                                 </div>
-                                <div className="space-y-1">
-                                    <div className="flex justify-between text-[10px] font-bold tracking-widest font-mono text-gray-400 uppercase">
-                                        <span>Trauma Event Vectoring</span> <span className="text-[#eab308]">ELEVATED HIGHWAY 49</span>
+                                <div className="space-y-1 group">
+                                    <div className="flex justify-between text-[10px] font-bold tracking-widest font-mono text-gray-400 uppercase mb-2 mt-2">
+                                        <span>Trauma Event Vectoring</span> <span className="text-[#eab308] group-hover:scale-110 transition-transform origin-right">ELEVATED HIGHWAY 49</span>
                                     </div>
-                                    <div className="w-full bg-[#1b2230] h-2 rounded"><div className="bg-[#eab308] h-full rounded shadow-[0_0_10px_#eab308]" style={{width: '62%'}}></div></div>
+                                    <div className="w-full bg-[#1b2230] h-3 rounded-full overflow-hidden border border-black/50 shadow-inner"><div className="bg-[#eab308] h-full rounded-full shadow-[0_0_15px_#eab308] transition-all duration-1000" style={{width: '62%'}}></div></div>
                                 </div>
-                                <div className="space-y-1">
-                                    <div className="flex justify-between text-[10px] font-bold tracking-widest font-mono text-gray-400 uppercase">
-                                        <span>Emergency Ward Demand</span> <span className="text-[#22c55e]">NOMINAL CAPACITY</span>
+                                <div className="space-y-1 group">
+                                    <div className="flex justify-between text-[10px] font-bold tracking-widest font-mono text-gray-400 uppercase mb-2 mt-2">
+                                        <span>Emergency Ward Demand</span> <span className="text-[#22c55e] group-hover:scale-110 transition-transform origin-right">NOMINAL CAPACITY</span>
                                     </div>
-                                    <div className="w-full bg-[#1b2230] h-2 rounded"><div className="bg-[#22c55e] h-full rounded shadow-[0_0_10px_#22c55e]" style={{width: '35%'}}></div></div>
+                                    <div className="w-full bg-[#1b2230] h-3 rounded-full overflow-hidden border border-black/50 shadow-inner"><div className="bg-[#22c55e] h-full rounded-full shadow-[0_0_15px_#22c55e] transition-all duration-1000" style={{width: '35%'}}></div></div>
                                 </div>
                             </div>
                          </div>
@@ -1184,8 +1237,8 @@ export default function AdminPage() {
                       
                       return (
                          <div key={log.id} className="flex items-center justify-between hover:bg-[#343d54] px-2 py-1 transition-colors rounded">
-                            <span className={log.isAction ? "text-[#eab308]" : ""}>▶ [{timeStr}] {log.message}</span>
-                            <span className="opacity-60 text-[10px]">{timeStr}</span>
+                            <span className={log.isAction ? "text-[#eab308]" : ""} suppressHydrationWarning>▶ [{timeStr}] {log.message}</span>
+                            <span className="opacity-60 text-[10px]" suppressHydrationWarning>{timeStr}</span>
                          </div>
                       );
                    })}

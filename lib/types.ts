@@ -31,6 +31,7 @@ export interface Hospital {
   capacity: HospitalCapacity;
   capabilities: IssueType[];
   affordability: 'budget' | 'standard' | 'premium';
+  accessCode?: string;
 }
 
 // Incident types

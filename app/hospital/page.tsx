@@ -62,8 +62,8 @@ function HospitalDashboardContent() {
 
    const incidents: Incident[] = data?.incidents || [];
 
-   // For the sake of the demo, we show any incoming incident across the city so the dashboard lights up
-   const myIncidents = incidents;
+   // Display incoming incidents only for this specific hospital
+   const myIncidents = incidents.filter((inc) => inc.hospitalId === hospitalId);
 
    const handleUpdateResources = async () => {
       if (!currentHospital) return;
@@ -322,17 +322,7 @@ function HospitalDashboardContent() {
                      </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 pt-6">
-                     <button className="col-span-2 lg:col-span-1 bg-[#22c55e] text-white font-bold tracking-wider py-4 rounded shadow-[0_0_15px_rgba(34,197,94,0.5)] hover:bg-[#4ade80] transition-colors border border-[#4ade80] uppercase text-xs">
-                        NOTIFY SPECIALTY TEAM
-                     </button>
-                     <button className="bg-[#eab308] text-[#713f12] font-bold tracking-wider py-4 rounded shadow-[0_0_15px_rgba(234,179,8,0.5)] hover:bg-[#fde047] transition-colors border border-[#fde047] uppercase text-xs">
-                        ALLOCATE SURGERY SUITE
-                     </button>
-                     <button className="bg-[#ef4444] text-white font-bold tracking-wider py-4 rounded shadow-[0_0_15px_rgba(239,68,68,0.5)] hover:bg-[#f87171] transition-colors border border-[#f87171] uppercase text-[10px] lg:text-xs text-center flex items-center justify-center p-2">
-                        ACTIVATE EMERGENCY PROTOCOL
-                     </button>
-                  </div>
+                  {/* Buttons removed per request */}
                </div>
             </div>
 

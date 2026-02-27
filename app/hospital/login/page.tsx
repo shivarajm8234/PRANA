@@ -9,6 +9,7 @@ export default function HospitalLogin() {
     const router = useRouter();
     const [hospitals, setHospitals] = useState<any[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [passcode, setPasscode] = useState('');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,6 +41,11 @@ export default function HospitalLogin() {
         const selectedHospital = hospitals.find(h => h.name === searchQuery);
         if (!selectedHospital) {
             setError('Please select a valid hospital from the list.');
+            return;
+        }
+
+        if (selectedHospital.accessCode && passcode !== selectedHospital.accessCode) {
+            setError('Invalid authorization code.');
             return;
         }
 
@@ -133,12 +139,15 @@ export default function HospitalLogin() {
 
                         <div>
                             <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">
-                                Authorization Code (Optional)
+                                Authorization Code
                             </label>
                             <input
                                 type="password"
                                 placeholder="••••••••"
+                                value={passcode}
+                                onChange={(e) => setPasscode(e.target.value)}
                                 className="w-full h-12 bg-[#1b2230] border border-[#30394f] rounded-lg text-white px-4 focus:outline-none focus:border-blue-500 transition-colors font-mono placeholder-gray-600"
+                                required
                             />
                         </div>
 

@@ -10,6 +10,10 @@ interface LiveMapViewProps {
   hospitalLocation: Coordinates | null;
   isLoading?: boolean;
   isTrafficCleared?: boolean;
+  isRerouting?: boolean;
+  isDriving?: boolean;
+  onNavigationUpdate?: (text: string) => void;
+  onArrival?: () => void;
   className?: string;
 }
 
@@ -18,27 +22,55 @@ export function LiveMapView({
   hospitalLocation,
   isLoading = false,
   isTrafficCleared = false,
+  isRerouting = false,
+  isDriving = false,
+  onNavigationUpdate,
+  onArrival,
   className = "w-full h-96 rounded-lg overflow-hidden border-2 border-gray-200",
 }: LiveMapViewProps) {
   const [map, setMap] = useState<L.Map | null>(null);
-  const [ambulanceMarker, setAmbulanceMarker] = useState<L.Marker | null>(null);
-  const [hospitalMarker, setHospitalMarker] = useState<L.Marker | null>(null);
-  const [activeRoutePoints, setActiveRoutePoints] = useState<[number, number][]>([]);
+  const ambulanceMarkerRef = useRef<L.Marker | null>(null);
+  const hospitalMarkerRef = useRef<L.Marker | null>(null);
   const routeRef = useRef<L.Polyline | null>(null);
+  const activeRoutePointsRef = useRef<[number, number][]>([]);
+  const signalLeafletMarkersRef = useRef<L.Marker[]>([]);
+  const stepRef = useRef<number>(0);
+  const moveIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Keep refs for callbacks and props so interval always has fresh closures without restarting
+  const onArrivalRef = useRef(onArrival);
+  const onNavigationUpdateRef = useRef(onNavigationUpdate);
+  const isTrafficClearedRef = useRef(isTrafficCleared);
+  const isDrivingRef = useRef(isDriving);
 
+  useEffect(() => {
+    onArrivalRef.current = onArrival;
+    onNavigationUpdateRef.current = onNavigationUpdate;
+    isTrafficClearedRef.current = isTrafficCleared;
+    isDrivingRef.current = isDriving;
+  }, [onArrival, onNavigationUpdate, isTrafficCleared, isDriving]);
+
+  // Map Initialization
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const mapContainer = document.getElementById('ambulance-map');
     if (!mapContainer) return;
 
-    // Initialize map (Center on Bangalore)
-    const newMap = L.map('ambulance-map').setView([12.9716, 77.5946], 13);
+    if ((mapContainer as any)._leaflet_id) {
+       (mapContainer as any)._leaflet_id = null;
+    }
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors',
-      maxZoom: 19,
+    const newMap = L.map('ambulance-map', {
+      zoomControl: false,
+    }).setView([12.9716, 77.5946], 13);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+      maxZoom: 20
     }).addTo(newMap);
+
+    L.control.zoom({ position: 'bottomright' }).addTo(newMap);
 
     setMap(newMap);
 
@@ -47,12 +79,14 @@ export function LiveMapView({
     };
   }, []);
 
-  // Update ambulance marker
+  // Update Ambulance Marker
   useEffect(() => {
     if (!map || !ambulanceLocation) return;
 
-    if (ambulanceMarker) {
-      ambulanceMarker.setLatLng([ambulanceLocation.latitude, ambulanceLocation.longitude]);
+    if (ambulanceMarkerRef.current) {
+      if (!isDrivingRef.current) {
+        ambulanceMarkerRef.current.setLatLng([ambulanceLocation.latitude, ambulanceLocation.longitude]);
+      }
     } else {
       const marker = L.marker([ambulanceLocation.latitude, ambulanceLocation.longitude], {
         icon: L.divIcon({
@@ -72,17 +106,17 @@ export function LiveMapView({
       }).addTo(map);
 
       marker.bindPopup('Current Location');
-      setAmbulanceMarker(marker);
+      ambulanceMarkerRef.current = marker;
       map.setView([ambulanceLocation.latitude, ambulanceLocation.longitude], 13);
     }
-  }, [map, ambulanceLocation, ambulanceMarker]);
+  }, [map, ambulanceLocation]);
 
-  // Update hospital marker and route
+  // Update Hospital Marker & Route computation
   useEffect(() => {
     if (!map || !hospitalLocation) return;
 
-    if (hospitalMarker) {
-      hospitalMarker.setLatLng([hospitalLocation.latitude, hospitalLocation.longitude]);
+    if (hospitalMarkerRef.current) {
+      hospitalMarkerRef.current.setLatLng([hospitalLocation.latitude, hospitalLocation.longitude]);
     } else {
       const marker = L.marker([hospitalLocation.latitude, hospitalLocation.longitude], {
         icon: L.divIcon({
@@ -102,28 +136,25 @@ export function LiveMapView({
       }).addTo(map);
 
       marker.bindPopup('Hospital Destination');
-      setHospitalMarker(marker);
+      hospitalMarkerRef.current = marker;
     }
 
-    // Draw route
     if (ambulanceLocation && hospitalLocation) {
       const fetchRoute = async () => {
         try {
-          // OpenRouteService expects longitude,latitude
           const start = `${ambulanceLocation.longitude},${ambulanceLocation.latitude}`;
           const end = `${hospitalLocation.longitude},${hospitalLocation.latitude}`;
-          const url = `https://router.project-osrm.org/route/v1/driving/${ambulanceLocation.longitude},${ambulanceLocation.latitude};${hospitalLocation.longitude},${hospitalLocation.latitude}?geometries=geojson`;
+          const url = `https://router.project-osrm.org/route/v1/driving/${start};${end}?geometries=geojson&alternatives=${isRerouting ? 'true' : 'false'}`;
           
           const response = await fetch(url);
-          
           if (!response.ok) throw new Error('Route fetch failed');
           
           const data = await response.json();
           let routeCoordinates: [number, number][] = [];
           
           if (data.routes && data.routes.length > 0) {
-            // OSRM returns coordinates directly in geojson format [lng, lat]
-            routeCoordinates = data.routes[0].geometry.coordinates.map((coord: [number, number]) => [coord[1], coord[0]]);
+            const routeIndex = (isRerouting && data.routes.length > 1) ? 1 : 0;
+            routeCoordinates = data.routes[routeIndex].geometry.coordinates.map((coord: [number, number]) => [coord[1], coord[0]]);
           } else {
              routeCoordinates = [
               [ambulanceLocation.latitude, ambulanceLocation.longitude],
@@ -131,102 +162,144 @@ export function LiveMapView({
             ];
           }
 
-          // Remove Fake generator fallbacks
-          if (routeCoordinates.length === 0) {
-             routeCoordinates = [
-              [ambulanceLocation.latitude, ambulanceLocation.longitude],
-              [hospitalLocation.latitude, hospitalLocation.longitude],
-            ];
+          activeRoutePointsRef.current = routeCoordinates;
+          
+          // Reset driving animation step only when rerouting/fetching new primary route
+          if (moveIntervalRef.current) {
+            clearInterval(moveIntervalRef.current);
+            moveIntervalRef.current = null;
           }
-
-          setActiveRoutePoints(routeCoordinates);          if (routeRef.current) {
+          
+          // Fast-forward step if we re-fetched but we were previously close to the end...
+          // If we had already finished the drive (step > length), do not reset to 0 unless it's a new route
+          if (stepRef.current < routeCoordinates.length) {
+             stepRef.current = 0; 
+          } 
+          
+          if (routeRef.current) {
             map.removeLayer(routeRef.current);
           }
 
           const newRoute = L.polyline(routeCoordinates, {
-            color: '#3b82f6', // Changed to blue to indicate actual routing
+            color: isRerouting ? '#a855f7' : '#3b82f6', // Purple for alternate route
             weight: 4,
             opacity: 0.8,
             dashArray: undefined, // Solid line for actual roads
           }).addTo(map);
 
           routeRef.current = newRoute;
-
-          // Fit bounds to show the whole route
           map.fitBounds(newRoute.getBounds().pad(0.1));
+
+          setupTrafficSignals();
+          startDrivingSimulation();
+
         } catch (error) {
           console.error("Error drawing map route:", error);
-          
-          // Fallback on error
-          if (routeRef.current) map.removeLayer(routeRef.current);
-          routeRef.current = L.polyline(
-            [
-              [ambulanceLocation.latitude, ambulanceLocation.longitude],
-              [hospitalLocation.latitude, hospitalLocation.longitude],
-            ],
-            { color: '#ef4444', weight: 3, dashArray: '5, 5' }
-          ).addTo(map);
         }
       };
 
       fetchRoute();
     } else {
-        setActiveRoutePoints([]);
+        activeRoutePointsRef.current = [];
+        if (moveIntervalRef.current) clearInterval(moveIntervalRef.current);
     }
-  }, [map, hospitalLocation, ambulanceLocation, hospitalMarker]);
+  }, [map, hospitalLocation, ambulanceLocation, isRerouting]); // Omitting isDriving to not re-fetch
 
-  // Traffic Signal Simulation
-  useEffect(() => {
-    if (!isTrafficCleared || !map || !ambulanceMarker || activeRoutePoints.length === 0) return;
+  const getSignalIcon = (isGreen: boolean) => L.divIcon({
+    className: 'bg-transparent border-none',
+    html: `
+      <div class="relative flex items-center justify-center w-8 h-8">
+        <div class="w-5 h-5 rounded-full border-2 border-[#1b2230] flex ${isGreen ? 'bg-green-500 shadow-[0_0_20px_#22c55e]' : 'bg-red-500 shadow-[0_0_20px_#ef4444]'} transition-colors duration-300"></div>
+      </div>
+    `,
+    iconSize: [32, 32],
+    iconAnchor: [16, 16]
+  });
 
-    // Pick 3 points as traffic signals along the route
+  const setupTrafficSignals = () => {
+    if (!map || activeRoutePointsRef.current.length === 0) return;
+    
+    // Clear old
+    signalLeafletMarkersRef.current.forEach(m => map.removeLayer(m));
+    signalLeafletMarkersRef.current = [];
+
+    const pts = activeRoutePointsRef.current;
     const signals = [
-      activeRoutePoints[Math.floor(activeRoutePoints.length * 0.25)],
-      activeRoutePoints[Math.floor(activeRoutePoints.length * 0.50)],
-      activeRoutePoints[Math.floor(activeRoutePoints.length * 0.75)],
+      pts[Math.floor(pts.length * 0.25)],
+      pts[Math.floor(pts.length * 0.50)],
+      pts[Math.floor(pts.length * 0.75)],
     ];
 
-    const getSignalIcon = (isGreen: boolean) => L.divIcon({
-      className: 'bg-transparent border-none',
-      html: `
-        <div class="relative flex items-center justify-center w-8 h-8">
-          <div class="w-5 h-5 rounded-full border-2 border-[#1b2230] flex ${isGreen ? 'bg-green-500 shadow-[0_0_20px_#22c55e]' : 'bg-red-500 shadow-[0_0_20px_#ef4444]'} transition-colors duration-300"></div>
-        </div>
-      `,
-      iconSize: [32, 32],
-      iconAnchor: [16, 16]
+    signals.forEach(sig => {
+      const marker = L.marker(sig, { icon: getSignalIcon(false) }).addTo(map);
+      signalLeafletMarkersRef.current.push(marker);
     });
+  };
 
-    const signalLeafletMarkers = signals.map(sig => {
-       return L.marker(sig, { icon: getSignalIcon(false) }).addTo(map);
-    });
+  const startDrivingSimulation = () => {
+    if (!map || !ambulanceMarkerRef.current || activeRoutePointsRef.current.length === 0) return;
 
-    let step = 0;
-    const interval = setInterval(() => {
-       step += 1;
-       if (step >= activeRoutePoints.length) {
-          clearInterval(interval);
-          return;
-       }
-       const currentLoc = activeRoutePoints[step];
-       
-       ambulanceMarker.setLatLng(currentLoc);
-       map.panTo(currentLoc, { animate: true, duration: 0.1 });
+    if (moveIntervalRef.current) clearInterval(moveIntervalRef.current);
+    
+    moveIntervalRef.current = setInterval(() => {
+      if (!isDrivingRef.current) return; // Do not move if not actively driving
 
-       signalLeafletMarkers.forEach((sigMarker, idx) => {
-          const sig = signals[idx];
-          // Simple euclidian distance map logic
-          const dist = Math.sqrt(Math.pow(currentLoc[0] - sig[0], 2) + Math.pow(currentLoc[1] - sig[1], 2));
-          const isGreen = dist < 0.005; // Roughly 500m threshold on latlng metrics
-          sigMarker.setIcon(getSignalIcon(isGreen));
-       });
-    }, 1000); // Drastically slower interval
+      stepRef.current += 1;
+      const pts = activeRoutePointsRef.current;
 
+      if (stepRef.current >= pts.length - 1) {
+         if (moveIntervalRef.current) clearInterval(moveIntervalRef.current);
+         if (onArrivalRef.current) onArrivalRef.current();
+         return;
+      }
+
+      const currentLoc = pts[stepRef.current];
+      
+      if (ambulanceMarkerRef.current) {
+        ambulanceMarkerRef.current.setLatLng(currentLoc);
+        map.panTo(currentLoc, { animate: true, duration: 0.1 });
+      }
+
+      if (onNavigationUpdateRef.current && stepRef.current % 15 === 0) {
+        const directions = ["Continue straight for 400m", "Keep right at the fork", "Turn Left in 300m", "Merge onto HWY", "Slight right in 200m", "Approaching Hospital zone"];
+        onNavigationUpdateRef.current(directions[Math.floor(Math.random() * directions.length)]);
+      }
+
+      // Update signal lights
+      const signalPts = [
+        pts[Math.floor(pts.length * 0.25)],
+        pts[Math.floor(pts.length * 0.50)],
+        pts[Math.floor(pts.length * 0.75)],
+      ];
+
+      signalLeafletMarkersRef.current.forEach((sigMarker, idx) => {
+         const sig = signalPts[idx];
+         const dist = Math.sqrt(Math.pow(currentLoc[0] - sig[0], 2) + Math.pow(currentLoc[1] - sig[1], 2));
+         let isGreen = isTrafficClearedRef.current;
+         if (!isTrafficClearedRef.current) {
+           isGreen = dist < 0.005; 
+         }
+         sigMarker.setIcon(getSignalIcon(isGreen));
+      });
+    }, 700);
+  };
+
+  // If we just toggled driving without route change, maybe trigger simulation
+  useEffect(() => {
+     if (isDriving && !moveIntervalRef.current && activeRoutePointsRef.current.length > 0) {
+        startDrivingSimulation();
+     }
+  }, [isDriving]);
+
+  // Clean up
+  useEffect(() => {
     return () => {
-      clearInterval(interval);
-      signalLeafletMarkers.forEach(m => map.removeLayer(m));
+      if (moveIntervalRef.current) clearInterval(moveIntervalRef.current);
+      signalLeafletMarkersRef.current.forEach(m => {
+        if (map) map.removeLayer(m);
+      });
     };
-  }, [isTrafficCleared, map, ambulanceMarker, activeRoutePoints]);
+  }, [map]);
 
   return (
     <div className={className}>

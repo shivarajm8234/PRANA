@@ -25,11 +25,13 @@ export default function AmbulancePage() {
   const [incidentData, setIncidentData] = useState<any>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [showArrivalModal, setShowArrivalModal] = useState(false);
 
   // Feature specific states
   const [isSirenOn, setIsSirenOn] = useState(false);
   const [contactStatus, setContactStatus] = useState<'idle' | 'calling' | 'connected'>('idle');
   const [isRerouting, setIsRerouting] = useState(false);
+  const [hasRerouted, setHasRerouted] = useState(false);
   const [routeUpdateText, setRouteUpdateText] = useState("Turn Left in 300m");
   const [isTrafficCleared, setIsTrafficCleared] = useState(false);
   const [dispatchTime, setDispatchTime] = useState<number | null>(null);
@@ -114,8 +116,39 @@ export default function AmbulancePage() {
     }
   };
 
+  const handleMarkArrival = async () => {
+    try {
+      if (incidentData?.id) {
+        await fetch(`/api/incidents/${incidentData.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'completed', completedAt: Date.now() })
+        });
+      }
+    } catch (e) {
+      console.error('Failed to update incident', e);
+    }
+    setShowArrivalModal(true);
+  };
+
+  const resetToStandby = () => {
+    setShowArrivalModal(false);
+    setIncidentCreated(false);
+    setIncidentData(null);
+    setSelectedIssue(null);
+    setSelectedSeverity(null);
+    setIsSirenOn(false);
+    setContactStatus('idle');
+    setIsTrafficCleared(false);
+    setIsRerouting(false);
+    setHasRerouted(false);
+    setDispatchTime(null);
+    setRouteUpdateText("Turn Left in 300m");
+  };
+
   const handleManualReroute = () => {
     setIsRerouting(true);
+    setHasRerouted(true);
     setRouteUpdateText("Calculating alternate...");
     setTimeout(() => {
       setIsRerouting(false);
@@ -124,7 +157,27 @@ export default function AmbulancePage() {
   };
 
   return (
-    <div className="bg-[#1e2336] text-white flex flex-col font-sans h-[100dvh] overflow-hidden">
+    <div className="bg-[#1e2336] text-white flex flex-col font-sans h-[100dvh] overflow-hidden relative">
+      
+      {/* Arrival Success Modal */}
+      {showArrivalModal && (
+        <div className="absolute inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6 transition-all duration-300">
+          <div className="bg-[#1b2230] border-2 border-[#22c55e] rounded-3xl p-10 flex flex-col items-center max-w-lg w-full shadow-[0_0_50px_rgba(34,197,94,0.3)] animate-in zoom-in duration-300">
+            <div className="w-24 h-24 bg-[#22c55e]/20 rounded-full flex items-center justify-center mb-6">
+              <Check className="text-[#22c55e]" size={64} />
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-2 tracking-widest text-center mt-2">DESTINATION REACHED</h2>
+            <p className="text-gray-400 text-center mb-8 mt-4 text-base font-medium">Patient handover protocol logged. Central command has been successfully updated.</p>
+            <button
+               onClick={resetToStandby}
+               className="w-full bg-[#22c55e] hover:bg-green-500 text-white font-bold text-xl py-5 rounded-2xl tracking-widest transition-colors shadow-lg"
+            >
+              RETURN TO STANDBY
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Top Bar */}
       <div className="flex items-center justify-between px-6 py-4 bg-[#161a2b] border-b border-gray-800">
         <div className="text-sm font-bold tracking-wider text-gray-300">
@@ -178,6 +231,10 @@ export default function AmbulancePage() {
             ambulanceLocation={location}
             hospitalLocation={incidentCreated && incidentData ? incidentData.hospital.location : (bestMatch ? bestMatch.hospital.location : null)}
             isTrafficCleared={isTrafficCleared}
+            isRerouting={hasRerouted}
+            isDriving={!!(incidentCreated && incidentData) && isTrafficCleared}
+            onNavigationUpdate={setRouteUpdateText}
+            onArrival={handleMarkArrival}
             className="w-full h-full"
           />
         </div>
@@ -229,17 +286,7 @@ export default function AmbulancePage() {
                   <PhoneCall size={24} /> {isRerouting ? 'CALCULATING...' : 'ALTERNATE ROUTE'}
                 </button>
                 <button
-                  onClick={() => {
-                    setIncidentCreated(false);
-                    setIncidentData(null);
-                    setSelectedIssue(null);
-                    setSelectedSeverity(null);
-                    setIsSirenOn(false);
-                    setContactStatus('idle');
-                    setIsTrafficCleared(false);
-                    setDispatchTime(null);
-                    setRouteUpdateText("Turn Left in 300m");
-                  }}
+                  onClick={handleMarkArrival}
                   className="flex items-center justify-center gap-3 bg-[#22c55e] hover:bg-green-600 text-white p-5 rounded-xl font-bold text-lg transition-colors shadow-lg mt-auto">
                   <Check size={24} /> MARK ARRIVAL
                 </button>

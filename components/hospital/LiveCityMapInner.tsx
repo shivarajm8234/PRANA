@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import 'leaflet/dist/leaflet.css';
 import { Coordinates, Incident } from '@/lib/types';
 import L from 'leaflet';
@@ -13,6 +13,9 @@ export interface LiveCityMapInnerProps {
 }
 
 export function LiveCityMapInner({ hospitalLocation, hospitalName, incidents = [], className }: LiveCityMapInnerProps) {
+  const [map, setMap] = useState<L.Map | null>(null);
+  const activeAmbulancesRef = useRef<{ [key: string]: { marker: L.Marker, line: L.Polyline | null, moveInterval: NodeJS.Timeout | null } }>({});
+
   useEffect(() => {
     if (typeof window === 'undefined' || !hospitalLocation) return;
 
@@ -32,8 +35,8 @@ export function LiveCityMapInner({ hospitalLocation, hospitalName, incidents = [
       attributionControl: false
     }).setView(centerObj, 14);
 
-    // Dark style perfectly matching image 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    // Light style to match the ambulance map
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       maxZoom: 19,
     }).addTo(newMap);
 
@@ -52,17 +55,46 @@ export function LiveCityMapInner({ hospitalLocation, hospitalName, incidents = [
     }
 
     // Background ambient traffic routes
-    drawMockRoute([centerObj, [centerObj[0] + 0.015, centerObj[1] - 0.005], [centerObj[0] + 0.02, centerObj[1] - 0.015]], '#4b5563');
-    drawMockRoute([centerObj, [centerObj[0] - 0.015, centerObj[1] + 0.005], [centerObj[0] - 0.025, centerObj[1] + 0.01]], '#4b5563');
-    drawMockRoute([centerObj, [centerObj[0] - 0.01, centerObj[1] - 0.015], [centerObj[0] - 0.02, centerObj[1] - 0.02], [centerObj[0] - 0.03, centerObj[1] - 0.025]], '#4b5563');
-    drawMockRoute([centerObj, [centerObj[0] + 0.01, centerObj[1] + 0.02], [centerObj[0] + 0.02, centerObj[1] + 0.03]], '#4b5563');
+    drawMockRoute([centerObj, [centerObj[0] + 0.015, centerObj[1] - 0.005], [centerObj[0] + 0.02, centerObj[1] - 0.015]], '#9ca3af');
+    drawMockRoute([centerObj, [centerObj[0] - 0.015, centerObj[1] + 0.005], [centerObj[0] - 0.025, centerObj[1] + 0.01]], '#9ca3af');
+    drawMockRoute([centerObj, [centerObj[0] - 0.01, centerObj[1] - 0.015], [centerObj[0] - 0.02, centerObj[1] - 0.02], [centerObj[0] - 0.03, centerObj[1] - 0.025]], '#9ca3af');
+    drawMockRoute([centerObj, [centerObj[0] + 0.01, centerObj[1] + 0.02], [centerObj[0] + 0.02, centerObj[1] + 0.03]], '#9ca3af');
+
+    setMap(newMap);
+
+    return () => {
+      newMap.remove();
+      if (container != null) {
+        container.innerHTML = '';
+      }
+    };
+  }, [hospitalLocation]);
+
+  useEffect(() => {
+    if (!map || !hospitalLocation) return;
+    let isMounted = true;
+    const centerObj: [number, number] = [hospitalLocation.latitude, hospitalLocation.longitude];
+
+    const currentIncidentIds = new Set(incidents.map(i => i.id));
+
+    // Cleanup ambulances no longer incoming
+    Object.keys(activeAmbulancesRef.current).forEach(id => {
+       if (!currentIncidentIds.has(id)) {
+           const ref = activeAmbulancesRef.current[id];
+           if (ref.moveInterval) clearInterval(ref.moveInterval);
+           if (ref.marker) map.removeLayer(ref.marker);
+           if (ref.line) map.removeLayer(ref.line);
+           delete activeAmbulancesRef.current[id];
+       }
+    });
 
     // Render real incidents / incoming ambulances
     if (incidents && incidents.length > 0) {
       incidents.forEach((incident) => {
-        if (!incident.patientLocation) return;
+        if (!incident.patientLocation || activeAmbulancesRef.current[incident.id]) return;
+        
         const isCritical = incident.severity === 'critical';
-        const color = isCritical ? '#ef4444' : '#eab308'; // Red for critical, Yellow for others
+        const color = isCritical ? '#ef4444' : '#3b82f6'; // Match ambulance map styling
 
         const pos: [number, number] = [incident.patientLocation.latitude, incident.patientLocation.longitude];
 
@@ -73,26 +105,77 @@ export function LiveCityMapInner({ hospitalLocation, hospitalName, incidents = [
           iconAnchor: [14, 14],
         });
 
-        L.marker(pos, { icon: amboIcon }).addTo(newMap);
+        const amboMarker = L.marker(pos, { icon: amboIcon }).addTo(map);
+        activeAmbulancesRef.current[incident.id] = { marker: amboMarker, line: null, moveInterval: null };
 
-        // Draw a thick dashed line from ambulance to hospital
-        L.polyline([pos, centerObj], { color, weight: 3, dashArray: '10, 10', opacity: 0.8 }).addTo(newMap);
+        // Fetch actual driving directions from OSRM instead of straight line
+        const fetchRoute = async () => {
+          try {
+            const start = `${incident.patientLocation.longitude},${incident.patientLocation.latitude}`;
+            const end = `${hospitalLocation.longitude},${hospitalLocation.latitude}`;
+            const url = `https://router.project-osrm.org/route/v1/driving/${start};${end}?geometries=geojson`;
+            
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('Failed to fetch hospital route');
+            
+            const data = await response.json();
+            if (!isMounted || !map || !activeAmbulancesRef.current[incident.id]) return;
+            
+            if (data.routes && data.routes.length > 0) {
+              const routeCoordinates: [number, number][] = data.routes[0].geometry.coordinates.map((coord: [number, number]) => [coord[1], coord[0]]);
+              
+              const line = L.polyline(routeCoordinates, {
+                color, 
+                weight: 4, 
+                opacity: 0.8
+              }).addTo(map);
+
+              activeAmbulancesRef.current[incident.id].line = line;
+
+              // Simulate movement towards hospital (Synchronized with 700ms ambulance interval)
+              let step = 0;
+              const moveInterval = setInterval(() => {
+                if (!isMounted || !map || !activeAmbulancesRef.current[incident.id]) {
+                  clearInterval(moveInterval);
+                  return;
+                }
+                step += 1;
+                if (step >= routeCoordinates.length) {
+                  clearInterval(moveInterval);
+                  return;
+                }
+                const currentLoc = routeCoordinates[step];
+                activeAmbulancesRef.current[incident.id].marker.setLatLng(currentLoc);
+              }, 700);
+
+              activeAmbulancesRef.current[incident.id].moveInterval = moveInterval;
+
+            } else {
+              const line = L.polyline([pos, centerObj], { color, weight: 3, dashArray: '10, 10', opacity: 0.8 }).addTo(map);
+              activeAmbulancesRef.current[incident.id].line = line;
+            }
+          } catch (e) {
+            console.error("Route error:", e);
+            if (isMounted && map && activeAmbulancesRef.current[incident.id]) {
+               const line = L.polyline([pos, centerObj], { color, weight: 3, dashArray: '10, 10', opacity: 0.8 }).addTo(map);
+               activeAmbulancesRef.current[incident.id].line = line;
+            }
+          }
+        };
+        fetchRoute();
       });
     }
 
     return () => {
-      newMap.remove();
-      if (container != null) {
-        container.innerHTML = '';
-      }
+      isMounted = false;
     };
-  }, [hospitalLocation, incidents]);
+  }, [map, incidents, hospitalLocation]);
 
   return (
     <div className={className || "w-full h-full relative"}>
       <div id="hospital-city-map" className="w-full h-full rounded-xl overflow-hidden border-2 border-[#2b3346]" style={{ zIndex: 1 }} />
       <div className="absolute top-4 right-4 bg-[#1b2230]/90 border border-gray-600 px-4 py-2 rounded-lg backdrop-blur text-white font-bold text-xl tracking-wider shadow-xl z-[1000]">
-        ETA: 3 MIN
+        ETA: {incidents && incidents.length > 0 ? Math.ceil((incidents[0].estimatedArrivalTime || 180)/60) : 0} MIN
       </div>
     </div>
   );

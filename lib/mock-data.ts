@@ -30911,3 +30911,6 @@ export const INCIDENT_STATUSES = {
   arrived: 'Ambulance Arrived',
   completed: 'Incident Completed',
 };
+
+mockHospitals.forEach(h => h.accessCode = 'PRANA' + h.id.split('-')[1].padStart(3, '0'));
+
