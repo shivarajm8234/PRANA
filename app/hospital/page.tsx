@@ -107,18 +107,18 @@ function HospitalDashboardContent() {
    const activeIncidents = myIncidents.filter((inc) => inc.status !== 'completed');
    const primaryIncident = activeIncidents[0] || null;
 
-  return (
-    <div className="bg-[#1b2230] text-gray-200 flex flex-col font-sans h-[100dvh] overflow-hidden selection:bg-red-500/30">
-      {/* Top Banner Bar */}
-      <div className="flex items-center justify-between px-6 py-4 bg-[#212838] border-b border-[#30394f] shadow-md z-10 shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="bg-[#0f8b8d] text-white p-2 text-xl font-bold flex items-center justify-center rounded-full shadow-[0_0_15px_rgba(15,139,141,0.5)]">
-             <AlertTriangle size={20} />
-          </div>
-          <span className="text-lg font-bold tracking-widest text-[#d8deeb] uppercase ml-1">
-             St. Mary's Hospital
-          </span>
-        </div>
+   return (
+      <div className="bg-[#1b2230] text-gray-200 flex flex-col font-sans h-[100dvh] overflow-hidden selection:bg-red-500/30">
+         {/* Top Banner Bar */}
+         <div className="flex items-center justify-between px-6 py-4 bg-[#212838] border-b border-[#30394f] shadow-md z-10 shrink-0">
+            <div className="flex items-center gap-3">
+               <div className="bg-[#0f8b8d] text-white p-2 text-xl font-bold flex items-center justify-center rounded-full shadow-[0_0_15px_rgba(15,139,141,0.5)]">
+                  <AlertTriangle size={20} />
+               </div>
+               <span className="text-lg font-bold tracking-widest text-[#d8deeb] uppercase ml-1">
+                  {currentHospital.name}
+               </span>
+            </div>
 
             <div className="flex-1 flex justify-center items-center gap-12 font-bold tracking-wider text-sm opacity-90 hidden lg:flex">
                <span className="text-gray-400">10:30:45 AM</span>
@@ -242,38 +242,85 @@ function HospitalDashboardContent() {
                   </div>
                </div>
 
-            {/* Bottom Resources Grid */}
-            <div className="space-y-3 pt-2 pb-6">
-                <h3 className="font-bold text-lg tracking-wider text-white">Resource & Capacity Monitor</h3>
-                
-                <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-xs font-bold tracking-wider">
-                   <div className="space-y-1">
-                      <div className="opacity-70 uppercase">Emergency Beds:</div>
-                      <div className="text-lg font-mono tracking-widest text-[#d8deeb]">12 / 20</div>
-                      <div className="text-[#eab308] uppercase text-[10px]">ETA (YELLOW)</div>
-                   </div>
-                   
-                   <div className="space-y-1 relative">
-                      <div className="opacity-70 uppercase flex justify-between items-center pr-2">
-                         ICU Availability:
-                         <span className="bg-[#e84142] text-white px-2 rounded font-bold shadow-md shadow-red-900/50 drop-shadow">RED</span>
-                      </div>
-                      <div className="text-lg font-mono tracking-widest text-[#d8deeb]">3 / 8</div>
-                   </div>
-                   
-                   <div className="space-y-1 col-span-2 pt-2 border-t border-gray-700/50 mt-2">
-                      <div className="opacity-70 uppercase">ON-DUTY DOCTORS:</div>
-                      <div className="text-sm tracking-wide text-[#d8deeb] font-normal leading-relaxed">
-                          Trauma 5, Cardiac 3, Pediatric 4, <br/>
-                          Neuro 4, General 8
-                      </div>
-                   </div>
-                   
-                   <div className="space-y-1 col-span-2 flex items-center gap-4 border-t border-gray-700/50 pt-4 mt-2">
-                      <div className="uppercase">BLOOD BANK:</div>
-                      <div className="bg-[#22c55e] text-[#064e3b] px-3 py-1 rounded text-[10px] font-bold shadow-md shadow-green-900/50 tracking-widest border border-[#4ade80]">GREEN</div>
-                   </div>
-                </div>
+               {/* Bottom Resources Grid */}
+               <div className="space-y-3 pt-2 pb-6">
+                  <div className="flex items-center justify-between">
+                     <h3 className="font-bold text-lg tracking-wider text-white">Resource & Capacity Monitor</h3>
+                     {hasUnsavedChanges && (
+                        <button
+                           onClick={handleUpdateResources}
+                           disabled={isUpdating}
+                           className={`text-xs px-4 py-1.5 rounded font-bold shadow-md transition-colors 
+                            ${isUpdating
+                                 ? 'bg-blue-600/50 text-white/50 cursor-not-allowed'
+                                 : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-900/50'}`}
+                        >
+                           {isUpdating ? 'SAVING...' : 'SAVE CHANGES'}
+                        </button>
+                     )}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-xs font-bold tracking-wider">
+                     <div className="space-y-1">
+                        <div className="opacity-70 uppercase">Emergency Beds:</div>
+                        <div className="text-lg font-mono tracking-widest text-[#d8deeb] flex items-center gap-2">
+                           <input
+                              type="number"
+                              min="0"
+                              value={generalBeds}
+                              onChange={(e) => {
+                                 setGeneralBeds(e.target.value);
+                                 setHasUnsavedChanges(true);
+                              }}
+                              className="w-16 bg-[#1b2230] border border-[#30394f] rounded px-2 py-1 focus:outline-none focus:border-blue-500"
+                           />
+                        </div>
+                        <div className="text-[#eab308] uppercase text-[10px]">ETA (YELLOW)</div>
+                     </div>
+
+                     <div className="space-y-1 relative">
+                        <div className="opacity-70 uppercase flex justify-between items-center pr-2">
+                           ICU Availability:
+                           <span className="bg-[#e84142] text-white px-2 rounded font-bold shadow-md shadow-red-900/50 drop-shadow">RED</span>
+                        </div>
+                        <div className="text-lg font-mono tracking-widest text-[#d8deeb] flex items-center gap-2">
+                           <input
+                              type="number"
+                              min="0"
+                              value={icuBeds}
+                              onChange={(e) => {
+                                 setIcuBeds(e.target.value);
+                                 setHasUnsavedChanges(true);
+                              }}
+                              className="w-16 bg-[#1b2230] border border-[#30394f] rounded px-2 py-1 focus:outline-none focus:border-blue-500"
+                           />
+                        </div>
+                     </div>
+
+                     <div className="space-y-1 col-span-2 pt-2 border-t border-gray-700/50 mt-2">
+                        <div className="opacity-70 uppercase mb-2">ON-DUTY DOCTORS:</div>
+                        <div className="flex items-center gap-2">
+                           <input
+                              type="number"
+                              min="0"
+                              value={doctors}
+                              onChange={(e) => {
+                                 setDoctors(e.target.value);
+                                 setHasUnsavedChanges(true);
+                              }}
+                              className="w-20 bg-[#1b2230] border border-[#30394f] rounded px-2 py-1 focus:outline-none focus:border-blue-500 font-mono text-lg"
+                           />
+                           <span className="text-sm tracking-wide text-[#d8deeb] font-normal leading-relaxed opacity-80 pl-2">
+                              Total available specialists and surgeons globally
+                           </span>
+                        </div>
+                     </div>
+
+                     <div className="space-y-1 col-span-2 flex items-center gap-4 border-t border-gray-700/50 pt-4 mt-2">
+                        <div className="uppercase">BLOOD BANK:</div>
+                        <div className="bg-[#22c55e] text-[#064e3b] px-3 py-1 rounded text-[10px] font-bold shadow-md shadow-green-900/50 tracking-widest border border-[#4ade80]">GREEN</div>
+                     </div>
+                  </div>
 
                   <div className="grid grid-cols-2 gap-4 pt-6">
                      <button className="col-span-2 lg:col-span-1 bg-[#22c55e] text-white font-bold tracking-wider py-4 rounded shadow-[0_0_15px_rgba(34,197,94,0.5)] hover:bg-[#4ade80] transition-colors border border-[#4ade80] uppercase text-xs">
