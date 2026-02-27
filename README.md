@@ -63,21 +63,48 @@ PRANA addresses these gaps with a modular system designed around four priorities
 ## System Architecture
 
 ```mermaid
-graph TB
+graph LR
     subgraph Ambulance Layer
         A1[Emergency Trigger] --> A2[Issue Select]
         A2 --> A3[GPS Lock]
         A3 --> A4[OSRM Route]
-        A4 --> A5[Drive Simulation]
     end
 
-    subgraph AI Core Engine
-        B1["Capability Score (30 pts)"]
-        B2["Bed Availability (25 pts)"]
-        B3["Doctor Score (20 pts)"]
-        B4["Distance Score (15 pts)"]
-        B5["Affordability (10 pts)"]
-        B1 & B2 & B3 & B4 & B5 --> B6[Optimal Hospital Match]
+    subgraph Neural Network -- AI Core Engine
+        direction LR
+
+        subgraph Input Layer
+            I1((Patient Location))
+            I2((Issue Type))
+            I3((Severity Level))
+            I4((Hospital Data))
+            I5((Affordability Pref))
+        end
+
+        subgraph Hidden Layer -- Scoring Neurons
+            H1(("Capability\n30 pts"))
+            H2(("Bed Availability\n25 pts"))
+            H3(("Doctor Score\n20 pts"))
+            H4(("Distance\n15 pts"))
+            H5(("Affordability\n10 pts"))
+        end
+
+        subgraph Output Layer
+            O1(("Optimal\nHospital\nMatch"))
+        end
+
+        I1 --> H1 & H2 & H3 & H4
+        I2 --> H1
+        I3 --> H1 & H2
+        I4 --> H2 & H3
+        I5 --> H5
+        I1 --> H4
+
+        H1 --> O1
+        H2 --> O1
+        H3 --> O1
+        H4 --> O1
+        H5 --> O1
     end
 
     subgraph Hospital Layer
@@ -94,9 +121,11 @@ graph TB
         D4[Audit Logs]
     end
 
-    A5 --> B6
-    B6 --> C1
-    B6 --> D1
+    A4 --> I1
+    A4 --> I2
+    A4 --> I3
+    O1 --> C1
+    O1 --> D1
 ```
 
 ---
