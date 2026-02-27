@@ -41,10 +41,9 @@ function scoreCapability(hospital: Hospital, issueType: IssueType): number {
 // Score bed availability (0-25 points)
 function scoreBedAvailability(hospital: Hospital, severity: Severity): number {
   const totalBeds = hospital.capacity.icuBeds + hospital.capacity.generalBeds;
-  const availableBeds = hospital.capacity.icuBeds + hospital.capacity.generalBeds; // Mock: assume all available
-
-  const bedUtilization = (totalBeds - availableBeds) / totalBeds;
-  const points = Math.max(0, 25 * (1 - bedUtilization));
+  // Simulate realistic utilization: hospitals with more beds tend to have more available
+  const utilizationFactor = Math.max(0.2, 1 - (totalBeds / 150)); // Larger hospitals = lower utilization
+  const points = Math.max(0, 25 * (1 - utilizationFactor));
 
   // Prioritize ICU for critical cases
   if (severity === 'critical' && hospital.capacity.icuBeds > 0) {
@@ -55,8 +54,8 @@ function scoreBedAvailability(hospital: Hospital, severity: Severity): number {
 
 // Score doctor availability (0-20 points)
 function scoreDoctorAvailability(hospital: Hospital): number {
-  const doctorUtilization = Math.min(1, hospital.capacity.doctors / 15);
-  return 20 * (1 - doctorUtilization);
+  const doctorCapacity = Math.min(1, hospital.capacity.doctors / 15);
+  return 20 * doctorCapacity;
 }
 
 // Score distance (0-15 points, closer is better)

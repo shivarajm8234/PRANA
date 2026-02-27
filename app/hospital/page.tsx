@@ -28,6 +28,7 @@ function HospitalDashboardContent() {
    const [doctors, setDoctors] = useState('');
    const [isUpdating, setIsUpdating] = useState(false);
    const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+   const [liveTime, setLiveTime] = useState('');
 
    // Read Hospital ID from URL
    const hospitalId = searchParams.get('id');
@@ -54,6 +55,14 @@ function HospitalDashboardContent() {
          })
          .catch(console.error);
    }, [hospitalId, router]);
+
+   // Live clock
+   useEffect(() => {
+      const tick = () => setLiveTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+      tick();
+      const timer = setInterval(tick, 1000);
+      return () => clearInterval(timer);
+   }, []);
 
    // Fetch incidents
    const { data, isLoading, error } = useSWR('/api/incidents', fetcher, {
@@ -121,10 +130,10 @@ function HospitalDashboardContent() {
             </div>
 
             <div className="flex-1 flex justify-center items-center gap-12 font-bold tracking-wider text-sm opacity-90 hidden lg:flex">
-               <span className="text-gray-400">10:30:45 AM</span>
+               <span className="text-gray-400" suppressHydrationWarning>{liveTime || '--:--:--'}</span>
                <div className="flex items-center gap-2 text-green-400">
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-[0_0_10px_#4ade80]"></span>
-                  TOTAL EMERGENCY LOAD: HIGH
+                  TOTAL EMERGENCY LOAD: {activeIncidents.length > 2 ? 'HIGH' : activeIncidents.length > 0 ? 'MODERATE' : 'NORMAL'}
                </div>
             </div>
 
@@ -161,9 +170,9 @@ function HospitalDashboardContent() {
                <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-[#1b2230] to-transparent h-32 z-10 pointer-events-none p-6">
                   <h2 className="text-xl font-bold text-white tracking-widest mb-1 shadow-black drop-shadow-lg">Live City Map</h2>
                   <div className="text-xs font-bold tracking-wider text-gray-400 space-y-1">
-                     <p className="opacity-90">TOTAL ACTIVE AMBULANCES: 7</p>
-                     <p className="opacity-90">INCOMING EMERGENCY CASES: 3</p>
-                     <p className="opacity-90">AVG. ARRIVAL TIME: 5 MIN</p>
+                     <p className="opacity-90">TOTAL ACTIVE AMBULANCES: {myIncidents.filter(i => i.status !== 'completed').length || 0}</p>
+                     <p className="opacity-90">INCOMING EMERGENCY CASES: {activeIncidents.length}</p>
+                     <p className="opacity-90">AVG. ARRIVAL TIME: {activeIncidents.length > 0 ? Math.ceil(activeIncidents.reduce((sum, i) => sum + (i.estimatedArrivalTime || 0), 0) / activeIncidents.length / 60) : 0} MIN</p>
                   </div>
                </div>
 
@@ -229,7 +238,7 @@ function HospitalDashboardContent() {
                         <div className="bg-[#22c55e] text-[#064e3b] font-bold text-[10px] tracking-widest px-2 py-1 rounded shadow">YELLOW</div>
                      </div>
                      <div className="space-y-2">
-                        <div className="text-sm font-bold tracking-wider opacity-90 text-gray-300">AMBULANCE ID: A98B</div>
+                        <div className="text-sm font-bold tracking-wider opacity-90 text-gray-300">AMBULANCE ID: {activeIncidents[0]?.ambulanceId || 'NONE'}</div>
                         <div className="text-sm font-bold tracking-wide flex justify-between items-center text-gray-300 border-b border-gray-700/50 pb-2">
                            <span className="opacity-90 uppercase">ICU Availability</span>
                            <span className="bg-[#30394e] px-3 border border-[#44506c] rounded text-white shadow-inner font-mono">1 / 4</span>

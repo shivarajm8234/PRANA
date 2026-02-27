@@ -42,13 +42,18 @@ export function LiveMapView({
   const onNavigationUpdateRef = useRef(onNavigationUpdate);
   const isTrafficClearedRef = useRef(isTrafficCleared);
   const isDrivingRef = useRef(isDriving);
+  const ambulanceLocationRef = useRef(ambulanceLocation);
+  // Track the last isRerouting value we fetched with, to prevent duplicate fetches
+  // null = never fetched, false = fetched initial route, true = fetched alternate route
+  const lastFetchedRerouteRef = useRef<boolean | null>(null);
 
   useEffect(() => {
     onArrivalRef.current = onArrival;
     onNavigationUpdateRef.current = onNavigationUpdate;
     isTrafficClearedRef.current = isTrafficCleared;
     isDrivingRef.current = isDriving;
-  }, [onArrival, onNavigationUpdate, isTrafficCleared, isDriving]);
+    ambulanceLocationRef.current = ambulanceLocation;
+  }, [onArrival, onNavigationUpdate, isTrafficCleared, isDriving, ambulanceLocation]);
 
   // Map Initialization
   useEffect(() => {
@@ -112,6 +117,7 @@ export function LiveMapView({
   }, [map, ambulanceLocation]);
 
   // Update Hospital Marker & Route computation
+  // IMPORTANT: ambulanceLocation is accessed via ref to avoid re-triggering route fetch on GPS updates
   useEffect(() => {
     if (!map || !hospitalLocation) return;
 
@@ -139,10 +145,16 @@ export function LiveMapView({
       hospitalMarkerRef.current = marker;
     }
 
-    if (ambulanceLocation && hospitalLocation) {
+    // Use the ref for ambulance location so GPS updates don't re-trigger route fetching
+    const currentAmbulanceLoc = ambulanceLocationRef.current;
+
+    if (currentAmbulanceLoc && hospitalLocation) {
+      // Prevent duplicate fetches: skip if we already fetched for this exact rerouting state
+      if (lastFetchedRerouteRef.current !== null && lastFetchedRerouteRef.current === isRerouting) return;
+
       const fetchRoute = async () => {
         try {
-          const start = `${ambulanceLocation.longitude},${ambulanceLocation.latitude}`;
+          const start = `${currentAmbulanceLoc.longitude},${currentAmbulanceLoc.latitude}`;
           const end = `${hospitalLocation.longitude},${hospitalLocation.latitude}`;
           const url = `https://router.project-osrm.org/route/v1/driving/${start};${end}?geometries=geojson&alternatives=${isRerouting ? 'true' : 'false'}`;
           
@@ -157,24 +169,22 @@ export function LiveMapView({
             routeCoordinates = data.routes[routeIndex].geometry.coordinates.map((coord: [number, number]) => [coord[1], coord[0]]);
           } else {
              routeCoordinates = [
-              [ambulanceLocation.latitude, ambulanceLocation.longitude],
+              [currentAmbulanceLoc.latitude, currentAmbulanceLoc.longitude],
               [hospitalLocation.latitude, hospitalLocation.longitude],
             ];
           }
 
           activeRoutePointsRef.current = routeCoordinates;
           
-          // Reset driving animation step only when rerouting/fetching new primary route
+          // Clear existing interval before starting fresh
           if (moveIntervalRef.current) {
             clearInterval(moveIntervalRef.current);
             moveIntervalRef.current = null;
           }
           
-          // Fast-forward step if we re-fetched but we were previously close to the end...
-          // If we had already finished the drive (step > length), do not reset to 0 unless it's a new route
-          if (stepRef.current < routeCoordinates.length) {
-             stepRef.current = 0; 
-          } 
+          // Always reset step to 0 for a new route fetch
+          stepRef.current = 0;
+          lastFetchedRerouteRef.current = isRerouting;
           
           if (routeRef.current) {
             map.removeLayer(routeRef.current);
@@ -201,9 +211,10 @@ export function LiveMapView({
       fetchRoute();
     } else {
         activeRoutePointsRef.current = [];
+        lastFetchedRerouteRef.current = null;
         if (moveIntervalRef.current) clearInterval(moveIntervalRef.current);
     }
-  }, [map, hospitalLocation, ambulanceLocation, isRerouting]); // Omitting isDriving to not re-fetch
+  }, [map, hospitalLocation, isRerouting]); // ambulanceLocation accessed via ref, not in deps
 
   const getSignalIcon = (isGreen: boolean) => L.divIcon({
     className: 'bg-transparent border-none',

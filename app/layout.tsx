@@ -7,9 +7,9 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.app',
+  title: 'PRANA — Emergency Coordination Platform',
+  description: 'City-wide emergency coordination for ambulances, hospitals, and traffic systems. Intelligent routing, emergency-aware hospital matching, and adaptive traffic signal priority.',
+  generator: 'PRANA Platform',
   icons: {
     icon: [
       {

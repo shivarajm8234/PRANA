@@ -72,7 +72,6 @@ export function LiveCityMapInner({ hospitalLocation, hospitalName, incidents = [
 
   useEffect(() => {
     if (!map || !hospitalLocation) return;
-    let isMounted = true;
     const centerObj: [number, number] = [hospitalLocation.latitude, hospitalLocation.longitude];
 
     const currentIncidentIds = new Set(incidents.map(i => i.id));
@@ -91,10 +90,11 @@ export function LiveCityMapInner({ hospitalLocation, hospitalName, incidents = [
     // Render real incidents / incoming ambulances
     if (incidents && incidents.length > 0) {
       incidents.forEach((incident) => {
+        // Skip if marker already exists (movement interval is already running)
         if (!incident.patientLocation || activeAmbulancesRef.current[incident.id]) return;
         
         const isCritical = incident.severity === 'critical';
-        const color = isCritical ? '#ef4444' : '#3b82f6'; // Match ambulance map styling
+        const color = isCritical ? '#ef4444' : '#3b82f6';
 
         const pos: [number, number] = [incident.patientLocation.latitude, incident.patientLocation.longitude];
 
@@ -108,7 +108,8 @@ export function LiveCityMapInner({ hospitalLocation, hospitalName, incidents = [
         const amboMarker = L.marker(pos, { icon: amboIcon }).addTo(map);
         activeAmbulancesRef.current[incident.id] = { marker: amboMarker, line: null, moveInterval: null };
 
-        // Fetch actual driving directions from OSRM instead of straight line
+        // Fetch actual driving directions from OSRM
+        const incidentId = incident.id;
         const fetchRoute = async () => {
           try {
             const start = `${incident.patientLocation.longitude},${incident.patientLocation.latitude}`;
@@ -119,7 +120,8 @@ export function LiveCityMapInner({ hospitalLocation, hospitalName, incidents = [
             if (!response.ok) throw new Error('Failed to fetch hospital route');
             
             const data = await response.json();
-            if (!isMounted || !map || !activeAmbulancesRef.current[incident.id]) return;
+            // Guard: only proceed if the ambulance entry still exists (wasn't cleaned up)
+            if (!map || !activeAmbulancesRef.current[incidentId]) return;
             
             if (data.routes && data.routes.length > 0) {
               const routeCoordinates: [number, number][] = data.routes[0].geometry.coordinates.map((coord: [number, number]) => [coord[1], coord[0]]);
@@ -130,35 +132,46 @@ export function LiveCityMapInner({ hospitalLocation, hospitalName, incidents = [
                 opacity: 0.8
               }).addTo(map);
 
-              activeAmbulancesRef.current[incident.id].line = line;
+              activeAmbulancesRef.current[incidentId].line = line;
 
               // Simulate movement towards hospital (Synchronized with 700ms ambulance interval)
               let step = 0;
               const moveInterval = setInterval(() => {
-                if (!isMounted || !map || !activeAmbulancesRef.current[incident.id]) {
+                // Only check if the ambulance entry still exists — DO NOT use isMounted
+                // because SWR polling changes the incidents array reference every 2s,
+                // which would kill this interval prematurely
+                if (!activeAmbulancesRef.current[incidentId]) {
                   clearInterval(moveInterval);
                   return;
                 }
                 step += 1;
-                if (step >= routeCoordinates.length) {
+                if (step >= routeCoordinates.length - 1) {
                   clearInterval(moveInterval);
+                  // Snap ambulance to hospital destination
+                  if (activeAmbulancesRef.current[incidentId]) {
+                    activeAmbulancesRef.current[incidentId].marker.setLatLng(centerObj);
+                  }
                   return;
                 }
                 const currentLoc = routeCoordinates[step];
-                activeAmbulancesRef.current[incident.id].marker.setLatLng(currentLoc);
+                if (activeAmbulancesRef.current[incidentId]) {
+                  activeAmbulancesRef.current[incidentId].marker.setLatLng(currentLoc);
+                }
               }, 700);
 
-              activeAmbulancesRef.current[incident.id].moveInterval = moveInterval;
+              activeAmbulancesRef.current[incidentId].moveInterval = moveInterval;
 
             } else {
               const line = L.polyline([pos, centerObj], { color, weight: 3, dashArray: '10, 10', opacity: 0.8 }).addTo(map);
-              activeAmbulancesRef.current[incident.id].line = line;
+              if (activeAmbulancesRef.current[incidentId]) {
+                activeAmbulancesRef.current[incidentId].line = line;
+              }
             }
           } catch (e) {
             console.error("Route error:", e);
-            if (isMounted && map && activeAmbulancesRef.current[incident.id]) {
+            if (map && activeAmbulancesRef.current[incidentId]) {
                const line = L.polyline([pos, centerObj], { color, weight: 3, dashArray: '10, 10', opacity: 0.8 }).addTo(map);
-               activeAmbulancesRef.current[incident.id].line = line;
+               activeAmbulancesRef.current[incidentId].line = line;
             }
           }
         };
@@ -166,9 +179,7 @@ export function LiveCityMapInner({ hospitalLocation, hospitalName, incidents = [
       });
     }
 
-    return () => {
-      isMounted = false;
-    };
+    // No cleanup that kills intervals — intervals self-manage via activeAmbulancesRef guard
   }, [map, incidents, hospitalLocation]);
 
   return (

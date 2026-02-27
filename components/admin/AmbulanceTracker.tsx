@@ -149,8 +149,10 @@ export function AmbulanceTracker({ ambulances, incidents, className }: Ambulance
                   return;
                 }
                 step += 1;
-                if (step >= routeCoordinates.length) {
+                if (step >= routeCoordinates.length - 1) {
                   clearInterval(ref.moveInterval!);
+                  // Snap to patient/incident destination
+                  activeMarkersRef.current[ambulance.id].marker.setLatLng(routeCoordinates[routeCoordinates.length - 1]);
                   return;
                 }
                 activeMarkersRef.current[ambulance.id].marker.setLatLng(routeCoordinates[step]);
