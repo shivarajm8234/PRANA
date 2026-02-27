@@ -8,12 +8,7 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const stats = [
-    { label: 'Avg Response Time', value: '4.2', unit: 'MIN', color: '#22c55e' },
-    { label: 'Hospitals Connected', value: '632', unit: '', color: '#3b82f6' },
-    { label: 'Active Ambulances', value: '156', unit: '', color: '#ef4444' },
-    { label: 'Lives Impacted', value: '12.4K', unit: '', color: '#a78bfa' },
-  ];
+
 
   const features = [
     { icon: Brain, title: 'AI-Powered Matching', desc: 'Multi-criteria scoring engine allocates the optimal hospital based on capability, bed availability, doctor count, distance, and affordability', color: '#8b5cf6' },
@@ -104,21 +99,7 @@ export default function Home() {
             Reducing golden-hour response times through AI-powered routing and adaptive signal control.
           </p>
 
-          {/* Stats bar */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-16">
-            {stats.map((stat, i) => (
-              <div
-                key={i}
-                className={`bg-[#141824] border border-[#1e2538] rounded-xl p-5 transition-all duration-700 hover:border-[${stat.color}]/30 hover:shadow-lg group ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                style={{ transitionDelay: `${200 + i * 100}ms` }}
-              >
-                <div className="text-3xl font-bold font-mono text-white group-hover:scale-105 transition-transform">
-                  {stat.value}<span className="text-sm text-gray-500 ml-1">{stat.unit}</span>
-                </div>
-                <div className="text-[10px] font-bold tracking-widest uppercase mt-2" style={{ color: stat.color }}>{stat.label}</div>
-              </div>
-            ))}
-          </div>
+
         </div>
       </section>
 
