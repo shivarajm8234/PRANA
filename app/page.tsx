@@ -44,7 +44,7 @@ export default function Home() {
           </Link>
 
           {/* Hospital Panel */}
-          <Link href="/hospital">
+          <Link href="/hospital/login">
             <Card className="p-6 h-full cursor-pointer hover:shadow-lg transition-all hover:scale-105 bg-white border-0">
               <div className="flex flex-col items-center text-center space-y-4">
                 <div className="p-3 bg-green-100 rounded-lg">
